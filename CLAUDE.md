@@ -30,18 +30,18 @@ docs/                      architecture.md, branch-protection.md
 .claude/  .github/
 ```
 
-### Reserved for later (do not create, no folders, no .gitkeep)
+### Reserved for later (do not create until needed: no folders, no .gitkeep)
 
-- `packages/ui` when a second app needs the components
-- `packages/core` domain model and ports
-- `packages/adapters` one implementation per port
-- `packages/db` Drizzle
-- `packages/e2e` Playwright
-- `apps/api` Hono
-- `infra/` Terraform
-- `ml/` Python
+These follow docs/architecture.md, not Dispatch.
 
-Add Turborepo when the first package exists. Ask before creating any package.
+- Phase 0 backend lives inside apps/web. No separate API app: endpoints are Next.js route handlers and server actions.
+- apps/web/lib/ports/ - one TypeScript interface per outside service: auth, billing, lab partner, mailer, AI drafts. Written when first used.
+- apps/web/lib/adapters/ - one implementation per port (Supabase auth, Stripe test mode, mock lab partner, and so on). Only adapters import vendor SDKs. Wired together in one composition file.
+- supabase/ - Supabase CLI migrations and a seed.sql of synthetic data. Separate identity and clinical schemas linked only by a random subject id, a versioned consent ledger, an append-only audit log, FHIR-shaped result tables. Ask before choosing a query layer.
+- infra/ (Phase 1) - infrastructure as code for the AWS Canada accounts (ca-central-1, ca-west-1). Tool chosen then.
+- ml/ (Phase 3) - Python ML zone in a separate account, fed only through the consent-gated de-identification gate. Outside the pnpm workspace and Biome.
+
+packages/ and Turborepo come only when a second app needs shared code. Ask before creating either.
 
 ## How the design evolves
 
