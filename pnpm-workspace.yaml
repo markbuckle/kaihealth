@@ -1,0 +1,9 @@
+packages:
+  - "apps/*"
+  - "packages/*"
+
+# pnpm 11 blocks dependency build scripts until each is listed here as true or false
+allowBuilds: {}
+
+publicHoistPattern:
+  - "@types/*"

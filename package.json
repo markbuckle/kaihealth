@@ -1,0 +1,21 @@
+{
+  "name": "que",
+  "private": true,
+  "packageManager": "pnpm@11.24.0",
+  "engines": {
+    "node": ">=22.13"
+  },
+  "scripts": {
+    "start": "pnpm --filter @que/web dev",
+    "dev": "pnpm -r --parallel run dev",
+    "build": "pnpm -r run build",
+    "lint": "biome check apps biome.json tsconfig.json package.json .claude",
+    "format": "biome check --write apps biome.json tsconfig.json package.json .claude",
+    "typecheck": "tsc --noEmit",
+    "check:contrast": "node apps/web/scripts/check-contrast.mjs"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.5.11",
+    "typescript": "^7.0.2"
+  }
+}
