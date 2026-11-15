@@ -1,0 +1,40 @@
+@import "tailwindcss";
+@import "../../../design/tokens/tokens.css" layer(base);
+
+@layer base {
+  :focus-visible {
+    outline: var(--border-strong) var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+/*
+  Border classes. Each sets width and style from a border token in tokens.css and takes the
+  border role as its colour. They sit here because @utility cannot be inside a layered import.
+  A new border token needs one matching block below.
+*/
+@utility border-hairline {
+  border: var(--border-hairline) var(--color-border);
+}
+
+@utility border-strong {
+  border: var(--border-strong) var(--color-border);
+}
+
+@utility border-dashed {
+  border: var(--border-dashed) var(--color-border);
+}
+
+@utility border-card {
+  border: var(--border-card) var(--color-border);
+}

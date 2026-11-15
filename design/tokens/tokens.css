@@ -1,0 +1,236 @@
+/*
+  Design tokens. The one file for palette, fonts, type, borders, radii, shadows and motion.
+
+  Tier 1: named values. Sets that are open to more entries. Adding one is one new line.
+  Tier 2: roles. They point at named values and are what components use by default.
+
+  Most tokens sit inside @theme, which is how Tailwind learns about them. Each line there
+  becomes both a CSS variable and a class, so there is no second mapping list to keep in sync:
+    --color-page      ->  var(--color-page)   and  bg-page, text-page, border-page
+    --font-heading    ->  var(--font-heading) and  font-heading
+    --radius-pill     ->  var(--radius-pill)  and  rounded-pill
+  "static" makes Tailwind output every variable, including ones no class uses yet.
+
+  See design/README.md for how to change or extend any of this.
+*/
+
+/* ---------------------------------------------------------------------------
+   Tier 1: named values
+   --------------------------------------------------------------------------- */
+@theme static {
+  /* drop the Tailwind default palette and radii so only the values below exist */
+  --color-*: initial;
+  --radius-*: initial;
+
+  /* palette: named by hue and step, higher step is darker */
+  --color-neutral-0: #fcfcfb;
+  --color-neutral-100: #eceae8;
+  --color-neutral-300: #cfccc9;
+  --color-neutral-400: #a9a6a3;
+  --color-neutral-500: #828282;
+  --color-neutral-600: #5e5c5a;
+  --color-neutral-800: #262625;
+  --color-neutral-900: #1c1c1b;
+
+  /* teal-500 is the wireframe accent. It fails 3:1 on light bands, so teal-600 is the accent role. */
+  --color-teal-500: #17a2ba;
+  --color-teal-600: #1593a9;
+  --color-teal-700: #0c7489;
+  --color-sky-300: #8ccbea;
+
+  --color-yellow-500: #f2b90f;
+  --color-orange-500: #f0883a;
+  --color-rose-500: #e26a85;
+  --color-purple-600: #96479a;
+  --color-indigo-700: #44488b;
+
+  /* status: the darker steps are for light bands, the lighter steps pass 4.5:1 on dark bands */
+  --color-green-500: #289f78;
+  --color-green-700: #1f7a5c;
+  --color-amber-500: #c27e00;
+  --color-amber-800: #8a5a00;
+  --color-red-400: #d76c72;
+  --color-red-600: #b8323a;
+
+  /* font families: the --font-geist style variables are set by next/font in apps/web/app/fonts.ts */
+  --font-serif: var(--font-instrument-serif), Georgia, serif;
+  --font-sans: var(--font-geist), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  /* type sizes: named by their pixel size at the default root size (text-16) */
+  --text-10: 0.625rem;
+  --text-11: 0.6875rem;
+  --text-12: 0.75rem;
+  --text-13: 0.8125rem;
+  --text-14: 0.875rem;
+  --text-15: 0.9375rem;
+  --text-16: 1rem;
+  --text-17: 1.0625rem;
+  --text-18: 1.125rem;
+  --text-20: 1.25rem;
+  --text-24: 1.5rem;
+  --text-28: 1.75rem;
+  --text-36: 2.25rem;
+  --text-40: 2.5rem;
+  --text-56: 3.5rem;
+  --text-64: 4rem;
+  --text-96: 6rem;
+
+  /* line heights (leading-display) */
+  --leading-tight: 0.9;
+  --leading-flat: 1;
+  --leading-display: 1.02;
+  --leading-title: 1.25;
+  --leading-snug: 1.3;
+  --leading-list: 1.4;
+  --leading-body: 1.5;
+
+  /* letter spacing (tracking-label) */
+  --tracking-number: -0.02em;
+  --tracking-display: -0.01em;
+  --tracking-caption: 0.04em;
+  --tracking-tag: 0.06em;
+  --tracking-label: 0.08em;
+
+  /* spacing: everything else uses the Tailwind 4px scale (p-6 is 24px) */
+  --spacing-section-compact: 4rem;
+  --spacing-section-roomy: 6.5rem;
+  --spacing-gutter-compact: 1.25rem;
+  --spacing-gutter-medium: 2.5rem;
+  --spacing-gutter-roomy: 7.5rem;
+
+  /* widths (max-w-content); Tailwind's own sizes such as max-w-md are also available */
+  --container-content: 75rem;
+  --container-dashboard: 65rem;
+  --container-list: 62.5rem;
+  /* not "prose": Tailwind has its own max-w-prose that would win */
+  --container-reading: 52.5rem;
+  --container-heading: 45rem;
+  --container-lead: 37.5rem;
+
+  /* radii (rounded-pill) */
+  --radius-sharp: 0;
+  --radius-xs: 0.5rem;
+  --radius-sm: 0.75rem;
+  --radius-soft: 1rem;
+  --radius-pill: 999px;
+  --radius-round: 50%;
+
+  /* shadows and effects: the wireframe has no shadows */
+  --shadow-none: 0 0 #0000;
+  --blur-blob: 70px;
+  --blur-blob-compact: 50px;
+
+  /* easings (ease-standard) */
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* named values that Tailwind has no class family for: used as var(--name) */
+:root {
+  /* border widths and styles: colour is added where the border is used */
+  --border-hairline: 1px solid;
+  --border-strong: 2px solid;
+  --border-dashed: 1px dashed;
+
+  /* motion durations */
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+}
+
+/* ---------------------------------------------------------------------------
+   Tier 2: roles (light theme)
+   --------------------------------------------------------------------------- */
+@theme static {
+  --color-page: var(--color-neutral-0);
+  --color-surface: var(--color-neutral-100);
+  --color-text: var(--color-neutral-900);
+  --color-text-muted: var(--color-neutral-600);
+  --color-border: var(--color-neutral-300);
+  --color-button: var(--color-neutral-900);
+  --color-button-text: var(--color-neutral-0);
+  --color-link: var(--color-teal-700);
+  --color-accent: var(--color-teal-600);
+
+  --color-status-good: var(--color-green-700);
+  --color-status-warn: var(--color-amber-800);
+  --color-status-flag: var(--color-red-600);
+
+  /* artwork colours do not change with the theme */
+  --color-swirl-1: var(--color-yellow-500);
+  --color-swirl-2: var(--color-orange-500);
+  --color-swirl-3: var(--color-rose-500);
+  --color-swirl-4: var(--color-purple-600);
+  --color-swirl-5: var(--color-indigo-700);
+  --color-swirl-6: var(--color-sky-300);
+
+  --font-heading: var(--font-serif);
+  --font-body: var(--font-sans);
+  --font-label: var(--font-mono);
+
+  --radius-card: var(--radius-soft);
+  --radius-inset: var(--radius-sm);
+  --radius-button: var(--radius-pill);
+
+  /* py-section-y and px-gutter: compact on small screens, roomy from the lg breakpoint */
+  --spacing-section-y: var(--spacing-section-compact);
+  --spacing-gutter: var(--spacing-gutter-compact);
+}
+
+:root {
+  --border-card: var(--border-hairline);
+}
+
+/* 48rem and 64rem match the Tailwind md and lg breakpoints; lg is where the desktop layout starts */
+@media (min-width: 48rem) {
+  :root {
+    --spacing-gutter: var(--spacing-gutter-medium);
+  }
+}
+
+@media (min-width: 64rem) {
+  :root {
+    --spacing-section-y: var(--spacing-section-roomy);
+    --spacing-gutter: var(--spacing-gutter-roomy);
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Tier 2: roles (dark theme)
+   data-theme="dark" on any element re-points the roles for everything inside it.
+   --------------------------------------------------------------------------- */
+[data-theme="dark"] {
+  --color-page: var(--color-neutral-900);
+  --color-surface: var(--color-neutral-800);
+  --color-text: var(--color-neutral-0);
+  --color-text-muted: var(--color-neutral-400);
+  --color-border: var(--color-neutral-500);
+  --color-button: var(--color-sky-300);
+  --color-button-text: var(--color-neutral-900);
+  --color-link: var(--color-sky-300);
+  --color-accent: var(--color-sky-300);
+
+  --color-status-good: var(--color-green-500);
+  --color-status-warn: var(--color-amber-500);
+  --color-status-flag: var(--color-red-400);
+}
+
+/*
+  data-theme="light" switches back to the light roles inside a dark band, for example the
+  light dashboard card in the dark hero. It repeats the light colour roles above, so change
+  both when a light colour role changes.
+*/
+[data-theme="light"] {
+  --color-page: var(--color-neutral-0);
+  --color-surface: var(--color-neutral-100);
+  --color-text: var(--color-neutral-900);
+  --color-text-muted: var(--color-neutral-600);
+  --color-border: var(--color-neutral-300);
+  --color-button: var(--color-neutral-900);
+  --color-button-text: var(--color-neutral-0);
+  --color-link: var(--color-teal-700);
+  --color-accent: var(--color-teal-600);
+
+  --color-status-good: var(--color-green-700);
+  --color-status-warn: var(--color-amber-800);
+  --color-status-flag: var(--color-red-600);
+}
