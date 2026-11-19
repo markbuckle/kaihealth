@@ -1,11 +1,13 @@
 import { routes, sectionIds } from '../lib/config';
 
 // Headings mark their italic accent words with asterisks: "three *steps.*"
+// Double asterisks give the accent colour without italics: "three **steps.**"
+// A "\n" in a heading or the hero lead is a line break.
 // Square-bracketed text and $X are placeholders still to be written.
 
 export const hero = {
-  title: 'Start early, *live healthy*',
-  lead: 'A yearly membership with 100+ lab tests, results explained by clinicians, and a dashboard that tracks how your numbers change.',
+  title: 'Your health checkup,\n**reimagined**',
+  lead: 'Comprehensive biomarker testing, expert clinicians,\nand a dashboard that makes actions simple',
   primary: { label: 'Start testing', href: routes.comingSoon },
   secondary: { label: 'See what we test', href: `#${sectionIds.whatWeTest}` },
   dashboard: {
@@ -18,7 +20,7 @@ export const hero = {
 
 export const howItWorks = {
   eyebrow: 'How it works',
-  title: 'From blood draw to plan in three *steps.*',
+  title: 'From blood draw to plan in three **steps**',
   steps: [
     {
       number: '01',
@@ -70,7 +72,7 @@ export const whatWeTest = {
 
 export const trust = {
   eyebrow: 'Why trust it',
-  title: 'Reviewed by clinicians. Stored in *Canada.*',
+  title: 'Reviewed by clinicians. Stored in **Canada.**',
   cards: [
     {
       icon: 'user',
@@ -91,7 +93,7 @@ export const trust = {
 
 export const membership = {
   eyebrow: 'Membership',
-  title: 'One membership. *Everything* included.',
+  title: 'One membership. Add-ons available.',
   planLabel: 'Annual membership',
   price: '$X',
   period: 'per year',
@@ -108,12 +110,12 @@ export const membership = {
 
 export const faq = {
   eyebrow: 'FAQ',
-  title: 'Questions, *answered.*',
+  title: 'Frequently asked questions',
 } as const;
 
 export const finalCta = {
   eyebrow: 'Get ahead',
-  title: 'Start with a *baseline.*',
+  title: 'Start with a **baseline**',
   lead: 'Join, book your first draw and see 100+ biomarkers explained.',
   cta: { label: 'Start testing', href: routes.comingSoon },
   priceNote: '$X per year',
