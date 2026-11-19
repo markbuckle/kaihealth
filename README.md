@@ -1,8 +1,8 @@
-# Que Health
+# Kai Health
 
 A portfolio concept for a Canadian preventive-health membership: 100+ lab tests a year, clinician-explained results and a biomarker dashboard.
 
-Concept project. Not a real testing service. No real data is collected. "Que Health" is a working name.
+Concept project. Not a real testing service. No real data is collected. "Kai Health" is a working name.
 
 ## Run it
 

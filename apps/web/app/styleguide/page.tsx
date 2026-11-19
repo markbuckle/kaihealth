@@ -276,7 +276,7 @@ function TokenSample({ kind, variable }: { kind: TokenKind; variable: string }) 
   const box = 'flex h-14 items-center justify-center overflow-hidden';
   const samples: Record<TokenKind, { style: CSSProperties; text?: string; className?: string }> = {
     color: { style: { background: value }, className: 'h-14 w-full rounded-inset border-card' },
-    font: { style: { fontFamily: value }, text: 'Aa Que', className: 'text-28' },
+    font: { style: { fontFamily: value }, text: 'Aa Kai', className: 'text-28' },
     text: { style: { fontSize: value }, text: 'Aa', className: 'leading-flat' },
     leading: {
       style: { lineHeight: value },

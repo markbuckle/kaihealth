@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Que Health (a working name, set once in `apps/web/lib/config.ts`) is a portfolio concept for a Canadian preventive-health membership. It is not a real service. Phase 0: synthetic data only, free tiers, every outside service behind an interface we own. See `docs/architecture.md`.
+Kai Health (a working name, set once in `apps/web/lib/config.ts`) is a portfolio concept for a Canadian preventive-health membership. It is not a real service. Phase 0: synthetic data only, free tiers, every outside service behind an interface we own. See `docs/architecture.md`.
 
 ## Working principle
 
