@@ -28,7 +28,9 @@ export function Hero() {
         >
           <AccentText text={hero.title} />
         </h1>
-        <p className="max-w-lead text-pretty text-17 text-text-muted lg:text-20">{hero.lead}</p>
+        <p className="max-w-lead text-pretty text-17 text-text-muted lg:text-20">
+          <AccentText text={hero.lead} />
+        </p>
         <div className="flex w-full flex-col gap-3 pt-1.5 sm:w-auto sm:flex-row lg:pt-2">
           <ButtonLink href={hero.primary.href}>{hero.primary.label}</ButtonLink>
           <ButtonLink href={hero.secondary.href} variant="outline" className="max-sm:hidden">

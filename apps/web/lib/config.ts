@@ -1,6 +1,6 @@
 // The brand name is a working name. Change it here and nowhere else.
 export const siteConfig = {
-  name: 'Que Health',
+  name: 'Kai Health',
   description:
     'A portfolio concept for a Canadian preventive-health membership. Not a real testing service.',
   locale: 'en-CA',

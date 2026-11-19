@@ -14,7 +14,7 @@ Rulesets need a public repository or a paid GitHub plan. On a private repository
 
 ## Apply it
 
-Replace `OWNER/REPO` with the repository, for example `your-name/quehealth`.
+Replace `OWNER/REPO` with the repository, for example `your-name/kaihealth`.
 
 ```sh
 gh api -X POST repos/OWNER/REPO/rulesets --input .github/rulesets/protect-main.json

@@ -1,12 +1,12 @@
 {
-  "name": "que",
+  "name": "kai",
   "private": true,
   "packageManager": "pnpm@11.24.0",
   "engines": {
     "node": ">=22.13"
   },
   "scripts": {
-    "start": "pnpm --filter @que/web dev",
+    "start": "pnpm --filter @kai/web dev",
     "dev": "pnpm -r --parallel run dev",
     "build": "pnpm -r run build",
     "lint": "biome check apps biome.json tsconfig.json package.json .claude",
