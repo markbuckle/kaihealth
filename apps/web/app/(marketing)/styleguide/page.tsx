@@ -1,26 +1,30 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import type { CSSProperties, ReactNode } from 'react';
-import { AccentText } from '../../components/ui/accent-text';
-import { Accordion } from '../../components/ui/accordion';
-import { BiomarkerCard, biomarkerCardVariants } from '../../components/ui/biomarker-card';
-import { Button, ButtonLink, buttonSizes, buttonVariants } from '../../components/ui/button';
-import { Card, cardVariants } from '../../components/ui/card';
-import { Chip, chipVariants } from '../../components/ui/chip';
-import { Eyebrow, eyebrowVariants } from '../../components/ui/eyebrow';
-import { Icon, iconNames } from '../../components/ui/icon';
-import { Logo } from '../../components/ui/logo';
-import { MobileMenu } from '../../components/ui/mobile-menu';
-import { Placeholder } from '../../components/ui/placeholder';
-import { RangeBar } from '../../components/ui/range-bar';
-import { SectionHeading, sectionHeadingVariants } from '../../components/ui/section';
-import { StatusPill } from '../../components/ui/status-pill';
-import { Swirl } from '../../components/ui/swirl';
-import { Tabs } from '../../components/ui/tabs';
-import { TrendChart } from '../../components/ui/trend-chart';
-import { type Status, sampleBiomarkers } from '../../content/sample-results';
-import { primaryNav } from '../../content/site';
-import { featureFlags, routes } from '../../lib/config';
+import { AccentText } from '../../../components/ui/accent-text';
+import { Accordion } from '../../../components/ui/accordion';
+import { BiomarkerCard, biomarkerCardVariants } from '../../../components/ui/biomarker-card';
+import { Button, ButtonLink, buttonSizes, buttonVariants } from '../../../components/ui/button';
+import { Card, cardVariants } from '../../../components/ui/card';
+import { Chip, chipVariants } from '../../../components/ui/chip';
+import { Eyebrow, eyebrowVariants } from '../../../components/ui/eyebrow';
+import { Icon, iconNames } from '../../../components/ui/icon';
+import { IconButton, iconButtonVariants } from '../../../components/ui/icon-button';
+import { Logo } from '../../../components/ui/logo';
+import { MobileMenu } from '../../../components/ui/mobile-menu';
+import { Placeholder } from '../../../components/ui/placeholder';
+import { RangeBar } from '../../../components/ui/range-bar';
+import { ScoreRing } from '../../../components/ui/score-ring';
+import { SectionHeading, sectionHeadingVariants } from '../../../components/ui/section';
+import { StatusPill, statusPillVariants } from '../../../components/ui/status-pill';
+import { Swirl } from '../../../components/ui/swirl';
+import { Tabs } from '../../../components/ui/tabs';
+import { TrendChart } from '../../../components/ui/trend-chart';
+import { showcaseSeries } from '../../../content/demo/showcase';
+import { primaryNav } from '../../../content/site';
+import { featureFlags, routes } from '../../../lib/config';
+import { markerPercent, rangeBands } from '../../../lib/health/results';
+import { statuses } from '../../../lib/health/types';
 import { cssVariable, type TokenGroup, type TokenKind, tokenGroups } from './token-list';
 import { TokenValue } from './token-value';
 
@@ -29,12 +33,22 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-const statuses: Status[] = ['good', 'warn', 'flag'];
-const themes = ['light', 'dark'] as const;
+// the landing page's light and dark bands, and the dashboard's own dark mode
+const themes = [
+  { key: 'light', title: 'Light theme', theme: 'light', style: undefined },
+  { key: 'dark', title: 'Dark theme', theme: 'dark', style: undefined },
+  { key: 'dashboard-dark', title: 'Dashboard dark theme', theme: 'dark', style: 'app' },
+] as const;
+
+const exampleTabs = [
+  { value: 'one', label: 'First', content: <p>First panel</p> },
+  { value: 'two', label: 'Second', content: <p>Second panel</p> },
+];
 
 export default function StyleguidePage() {
   if (!featureFlags.styleguide) notFound();
-  const [biomarker] = sampleBiomarkers;
+  const [series] = showcaseSeries;
+  const latest = series?.observations.at(-1);
 
   return (
     <>
@@ -52,16 +66,15 @@ export default function StyleguidePage() {
         </div>
       </section>
 
-      {themes.map((theme) => (
+      {themes.map(({ key, title, theme, style }) => (
         <section
-          key={theme}
+          key={key}
           data-theme={theme}
+          data-style={style}
           className="border-border border-t bg-page px-gutter py-section-y text-text"
         >
           <div className="mx-auto flex max-w-content flex-col gap-16">
-            <h2 className="font-heading text-40 leading-display">
-              {theme === 'light' ? 'Light theme' : 'Dark theme'}
-            </h2>
+            <h2 className="font-heading text-40 leading-display">{title}</h2>
 
             <Block title="Tokens">
               <div className="flex flex-col gap-10">
@@ -122,7 +135,7 @@ export default function StyleguidePage() {
               {sectionHeadingVariants.map((variant) => (
                 <SectionHeading
                   key={variant}
-                  id={`styleguide-heading-${theme}-${variant}`}
+                  id={`styleguide-heading-${key}-${variant}`}
                   variant={variant}
                   eyebrow={`variant="${variant}"`}
                   title="A heading with an *accent* word in it"
@@ -131,38 +144,53 @@ export default function StyleguidePage() {
               ))}
             </Block>
 
-            <Block title="Status pill, range bar and trend chart">
-              <Row label="status">
-                {statuses.map((status) => (
-                  <StatusPill key={status} status={status} />
-                ))}
+            <Block title="Status pill, score ring, range bar and trend chart">
+              {statusPillVariants.map((variant) => (
+                <Row key={variant} label={`variant="${variant}"`}>
+                  {statuses.map((status) => (
+                    <StatusPill
+                      key={status}
+                      variant={variant}
+                      status={status}
+                      direction={status === 'borderline' ? 'high' : undefined}
+                    />
+                  ))}
+                </Row>
+              ))}
+              <Row label="score ring">
+                <ScoreRing score={82} caption="of 100" />
               </Row>
-              {biomarker ? (
+              {series && latest ? (
                 <div className="grid max-w-md gap-6">
                   <RangeBar
-                    bands={biomarker.range.bands}
-                    status={biomarker.status}
-                    markerPercent={biomarker.range.markerPercent}
+                    bands={rangeBands(series.biomarker)}
+                    status={latest.interpretation.status}
+                    markerPercent={markerPercent(series.biomarker, latest.valueQuantity.value)}
                     showLabels
                   />
-                  <TrendChart biomarker={biomarker} />
+                  <TrendChart series={series} />
                 </div>
               ) : null}
             </Block>
 
             <Block title="Biomarker card">
               <div className="grid items-start gap-6 md:grid-cols-2">
-                {biomarker
+                {series
                   ? biomarkerCardVariants.map((variant) => (
                       <BiomarkerCard
                         key={variant}
-                        biomarker={biomarker}
+                        series={series}
                         variant={variant}
                         sampleLabel="Sample data"
                       />
                     ))
                   : null}
               </div>
+            </Block>
+
+            <Block title="Tabs, underline and filter">
+              <Tabs label="Underline tabs" variant="underline" items={exampleTabs} />
+              <Tabs label="Filter tabs" variant="filter" items={exampleTabs} />
             </Block>
 
             <Block title="Accordion and tabs">
@@ -194,9 +222,18 @@ export default function StyleguidePage() {
             <Block title="Logo, placeholder, icons and menu">
               <Row label="logo">
                 <Logo />
+                <Logo variant="wordmark" />
               </Row>
               <Row label="placeholder">
                 <Placeholder className="size-16" />
+                <Placeholder variant="media" label="Image" className="h-16 w-28" />
+              </Row>
+              <Row label="icon button">
+                {iconButtonVariants.map((variant) => (
+                  <IconButton key={variant} variant={variant} aria-label={`variant ${variant}`}>
+                    <Icon name="settings" />
+                  </IconButton>
+                ))}
               </Row>
               <Row label="icons">
                 {iconNames.map((name) => (

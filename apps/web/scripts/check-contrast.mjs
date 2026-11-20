@@ -11,30 +11,26 @@ const tokensPath = join(
 
 // [foreground role, background role, minimum ratio]. 4.5 is AA for body text,
 // 3 is AA for large text and for icons and graphics.
+const textRoles = ['text', 'text-muted', 'link'];
+const backgrounds = ['page', 'card', 'canvas', 'surface'];
+// status colours only mark dots, zones and charts; labels stay in the text colour
+const graphicRoles = ['accent', 'status-good', 'status-neutral', 'status-warn', 'status-flag'];
+
 const pairs = [
-  ['text', 'page', 4.5],
-  ['text', 'surface', 4.5],
-  ['text-muted', 'page', 4.5],
-  ['text-muted', 'surface', 4.5],
-  ['link', 'page', 4.5],
-  ['link', 'surface', 4.5],
+  ...textRoles.flatMap((role) => backgrounds.map((background) => [role, background, 4.5])),
   ['button-text', 'button', 4.5],
-  ['accent', 'page', 3],
-  ['accent', 'surface', 3],
-  ['status-good', 'page', 4.5],
-  ['status-warn', 'page', 4.5],
-  ['status-flag', 'page', 4.5],
-  ['status-good', 'surface', 4.5],
-  ['status-warn', 'surface', 4.5],
-  ['status-flag', 'surface', 4.5],
+  ...graphicRoles.flatMap((role) => backgrounds.map((background) => [role, background, 3])),
 ];
 
 const css = readFileSync(tokensPath, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
 
-// the declarations inside every block whose header matches, in file order
+// The declarations inside every block whose header matches, in file order. Headers must
+// start a line, so the dark block does not also match the dashboard's dark block.
 function declarationsIn(headerPattern) {
   const declarations = {};
-  for (const match of css.matchAll(new RegExp(`${headerPattern}\\s*\\{([^{}]*)\\}`, 'g'))) {
+  for (const match of css.matchAll(
+    new RegExp(`(?:^|\\n)${headerPattern}\\s*\\{([^{}]*)\\}`, 'g'),
+  )) {
     for (const [, name, value] of match[1].matchAll(/--([\w-]+)\s*:\s*([^;]+);/g)) {
       declarations[name] = value.trim();
     }
@@ -44,6 +40,10 @@ function declarationsIn(headerPattern) {
 
 const light = declarationsIn('@theme static');
 const dark = { ...light, ...declarationsIn('\\[data-theme="dark"\\]') };
+const dashboardDark = {
+  ...dark,
+  ...declarationsIn('\\[data-style="app"\\]\\[data-theme="dark"\\]'),
+};
 
 function resolve(tokens, name, seen = new Set()) {
   const value = tokens[name];
@@ -77,6 +77,7 @@ const rows = [];
 for (const [theme, tokens] of [
   ['light', light],
   ['dark', dark],
+  ['dashboard dark', dashboardDark],
 ]) {
   for (const [fg, bg, minimum] of pairs) {
     const fgHex = resolve(tokens, `color-${fg}`);

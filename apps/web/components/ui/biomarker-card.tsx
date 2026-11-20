@@ -1,5 +1,7 @@
-import { type Biomarker, describeChange, formatValue } from '../../content/sample-results';
 import { cn } from '../../lib/cn';
+import { areaLabel } from '../../lib/health/areas';
+import { describeChange, formatValue, markerPercent, rangeBands } from '../../lib/health/results';
+import type { ResultSeries } from '../../lib/health/types';
 import { Card } from './card';
 import { Eyebrow } from './eyebrow';
 import { RangeBar } from './range-bar';
@@ -18,46 +20,52 @@ const variants: Record<
 };
 
 type BiomarkerCardProps = {
-  biomarker: Biomarker;
+  series: ResultSeries;
   variant?: BiomarkerCardVariant;
   sampleLabel?: string;
   className?: string;
 };
 
 export function BiomarkerCard({
-  biomarker,
+  series,
   variant = 'full',
   sampleLabel,
   className,
 }: BiomarkerCardProps) {
+  const { biomarker, observations } = series;
+  const latest = observations.at(-1);
+  if (!latest) return null;
+
   const styles = variants[variant];
-  const change = styles.showDetail ? describeChange(biomarker) : null;
+  const value = latest.valueQuantity.value;
+  const { status } = latest.interpretation;
+  const area = areaLabel(biomarker.area);
+  const change = styles.showDetail ? describeChange(series) : null;
 
   return (
     <Card as="article" className={cn('flex flex-col', styles.card, className)}>
       <div className="flex items-start justify-between gap-3">
         <div className="flex flex-col gap-1">
-          <Eyebrow variant="card">
-            {sampleLabel ? `${biomarker.category} · ${sampleLabel}` : biomarker.category}
-          </Eyebrow>
+          <Eyebrow variant="card">{sampleLabel ? `${area} · ${sampleLabel}` : area}</Eyebrow>
           <h3 className={cn('font-medium leading-title', styles.title)}>{biomarker.name}</h3>
         </div>
-        <StatusPill status={biomarker.status} />
+        {/* the status alone keeps the pill short; the range bar shows which way it leans */}
+        <StatusPill status={status} />
       </div>
       <p className="flex flex-wrap items-baseline gap-2">
         <span className={cn('font-label leading-flat tracking-number', styles.value)}>
-          {formatValue(biomarker)}
+          {formatValue(biomarker, value)}
         </span>
-        <span className="font-label text-13 text-text-muted">{biomarker.unit}</span>
+        <span className="font-label text-13 text-text-muted">{biomarker.unit.display}</span>
         {change ? <span className="ml-auto text-13 text-text-muted">{change}</span> : null}
       </p>
       <RangeBar
-        bands={biomarker.range.bands}
-        status={biomarker.status}
-        markerPercent={biomarker.range.markerPercent}
+        bands={rangeBands(biomarker)}
+        status={status}
+        markerPercent={markerPercent(biomarker, value)}
         showLabels={styles.showDetail}
       />
-      {styles.showDetail ? <TrendChart biomarker={biomarker} /> : null}
+      {styles.showDetail ? <TrendChart series={series} /> : null}
     </Card>
   );
 }
