@@ -11,7 +11,6 @@ export const dashboardChrome = {
   later: 'Coming later',
   // icon-only links that are not ready say so in their accessible name
   soonSuffix: (label: string) => `${label}, soon`,
-  sidebar: 'Sidebar',
   groupToggle: (label: string) => `${label} pages`,
   darkMode: 'Dark mode',
   more: 'More',

@@ -1,26 +1,24 @@
 import Link from 'next/link';
 import { cn } from '../../lib/cn';
 import { routes, siteConfig } from '../../lib/config';
+import { logoSource } from '../../lib/logo';
 
-const variants = {
-  default: { link: 'gap-2.5 text-24 lg:text-28', mark: 'size-6 lg:size-7' },
-  // the dashboard's lowercase name without the mark; the text itself keeps its capitals
-  wordmark: { link: 'text-26 lowercase lg:text-28', mark: null },
-} as const;
+export const logoVariants = ['default', 'dashboard'] as const;
+export type LogoVariant = (typeof logoVariants)[number];
 
-export type LogoVariant = keyof typeof variants;
+const imageClassName = 'h-8 w-auto lg:h-10';
 
-export function LogoMark({ className }: { className?: string }) {
+// The images are read from design/logos. They are data URIs that next/image cannot optimise.
+function LogoImage({
+  name,
+  className,
+}: {
+  name: Parameters<typeof logoSource>[0];
+  className?: string;
+}) {
   return (
-    <svg
-      viewBox="0 0 28 28"
-      aria-hidden="true"
-      className={cn('shrink-0 fill-none stroke-current', className)}
-      strokeWidth={1.5}
-    >
-      <circle cx="14" cy="14" r="12.5" />
-      <circle cx="14" cy="14" r="4" className="fill-current stroke-none" />
-    </svg>
+    // biome-ignore lint/performance/noImgElement: see above
+    <img src={logoSource(name)} alt={siteConfig.name} className={cn(imageClassName, className)} />
   );
 }
 
@@ -33,18 +31,17 @@ export function Logo({
   href?: string;
   className?: string;
 }) {
-  const styles = variants[variant];
   return (
-    <Link
-      href={href}
-      className={cn(
-        'inline-flex min-h-11 items-center whitespace-nowrap font-heading text-text leading-flat',
-        styles.link,
-        className,
+    <Link href={href} className={cn('inline-flex min-h-11 items-center', className)}>
+      {variant === 'dashboard' ? (
+        // both are in the page and CSS shows the one for the theme, so there is no flash
+        <>
+          <LogoImage name="dashboardLight" className="in-data-[theme=dark]:hidden" />
+          <LogoImage name="dashboardDark" className="hidden in-data-[theme=dark]:block" />
+        </>
+      ) : (
+        <LogoImage name="landing" />
       )}
-    >
-      {styles.mark ? <LogoMark className={styles.mark} /> : null}
-      <span>{siteConfig.name}</span>
     </Link>
   );
 }

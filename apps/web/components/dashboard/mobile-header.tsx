@@ -14,7 +14,7 @@ const { notifications, askKai, account } = dashboardPages;
 export function MobileHeader({ member }: { member: Member }) {
   return (
     <header className="flex h-15 items-center justify-between gap-2 border-border border-b bg-page pr-2 pl-5 lg:hidden">
-      <Logo variant="wordmark" href={routes.dashboard} />
+      <Logo variant="dashboard" href={routes.dashboard} />
       <div className="flex items-center">
         <PageLink to={askKai} className={buttonClassName({ variant: 'outline', size: 'xs' })}>
           <Icon name="sparkle" className="size-3.75" />
