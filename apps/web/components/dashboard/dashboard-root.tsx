@@ -7,8 +7,6 @@ type DashboardRootState = {
   // undefined until known: on a first visit only the browser knows the system setting
   theme: Theme | undefined;
   setTheme: (theme: Theme) => void;
-  sidebarOpen: boolean;
-  toggleSidebar: () => void;
   // dialogs portal in here so they inherit the dashboard theme
   portal: HTMLElement | null;
 };
@@ -37,7 +35,6 @@ export function DashboardRoot({
   children: ReactNode;
 }) {
   const [theme, setThemeState] = useState(initialTheme);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [root, setRoot] = useState<HTMLDivElement | null>(null);
 
   // On a first visit the inline script has already set the theme on the element before
@@ -59,8 +56,6 @@ export function DashboardRoot({
       value={{
         theme,
         setTheme,
-        sidebarOpen,
-        toggleSidebar: () => setSidebarOpen((open) => !open),
         portal: root,
       }}
     >

@@ -222,7 +222,7 @@ export default function StyleguidePage() {
             <Block title="Logo, placeholder, icons and menu">
               <Row label="logo">
                 <Logo />
-                <Logo variant="wordmark" />
+                <Logo variant="dashboard" />
               </Row>
               <Row label="placeholder">
                 <Placeholder className="size-16" />

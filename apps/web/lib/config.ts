@@ -6,6 +6,16 @@ export const siteConfig = {
   locale: 'en-CA',
 } as const;
 
+// Each logo is the newest file in design/logos whose name starts with its prefix, so a new
+// version (kai-health-logo-blue-v2.svg) is picked up with no code change. To use another
+// file, change the prefix.
+export const logoFiles = {
+  landing: 'kai-health-logo-blue',
+  // the dashboard picks one for its light or dark theme
+  dashboardLight: 'kai-health-logo-darkblue',
+  dashboardDark: 'kai-health-logo-white',
+} as const;
+
 export const routes = {
   home: '/',
   // every call to action points here until the product exists

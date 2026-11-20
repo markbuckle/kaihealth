@@ -7,10 +7,7 @@ import { type DashboardPage, type SidebarEntry, sidebarNav } from '../../content
 import { cn } from '../../lib/cn';
 import { Icon } from '../ui/icon';
 import { IconButton } from '../ui/icon-button';
-import { useDashboardRoot } from './dashboard-root';
 import { PageLink, SoonLabel } from './page-link';
-
-export const sidebarId = 'dashboard-sidebar';
 
 const itemStyles = {
   top: 'min-h-10 px-3 text-14',
@@ -80,17 +77,12 @@ function NavGroup({ entry }: { entry: Extract<SidebarEntry, { type: 'group' }> }
   );
 }
 
-// The desktop navigation, from lg up. The top bar's sidebar button hides and shows it.
+// The desktop navigation, from lg up. The tab bar takes over below that.
 export function Sidebar() {
-  const { sidebarOpen } = useDashboardRoot();
   return (
     <nav
-      id={sidebarId}
       aria-label={dashboardChrome.mainNav}
-      className={cn(
-        'w-sidebar shrink-0 border-border border-r bg-page px-4 pt-5 pb-8',
-        sidebarOpen ? 'max-lg:hidden' : 'hidden',
-      )}
+      className="w-sidebar shrink-0 border-border border-r bg-page px-4 pt-5 pb-8 max-lg:hidden"
     >
       <ul className="flex flex-col gap-0.5">
         {sidebarNav.map((entry, index) => {
@@ -110,19 +102,5 @@ export function Sidebar() {
         })}
       </ul>
     </nav>
-  );
-}
-
-export function SidebarToggle() {
-  const { sidebarOpen, toggleSidebar } = useDashboardRoot();
-  return (
-    <IconButton
-      aria-expanded={sidebarOpen}
-      aria-controls={sidebarId}
-      aria-label={dashboardChrome.sidebar}
-      onClick={toggleSidebar}
-    >
-      <Icon name="sidebar" />
-    </IconButton>
   );
 }

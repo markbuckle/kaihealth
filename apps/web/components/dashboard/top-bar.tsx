@@ -7,7 +7,6 @@ import { Icon } from '../ui/icon';
 import { iconButtonClassName } from '../ui/icon-button';
 import { Logo } from '../ui/logo';
 import { PageLink, SoonLabel } from './page-link';
-import { SidebarToggle } from './sidebar';
 import { ThemeToggle } from './theme-toggle';
 
 const { notifications, askKai, settings, account } = dashboardPages;
@@ -16,10 +15,7 @@ const { notifications, askKai, settings, account } = dashboardPages;
 export function TopBar({ member }: { member: Member }) {
   return (
     <header className="flex h-18 items-center justify-between gap-4 border-border border-b bg-page px-6 max-lg:hidden">
-      <div className="flex items-center gap-3">
-        <SidebarToggle />
-        <Logo variant="wordmark" href={routes.dashboard} />
-      </div>
+      <Logo variant="dashboard" href={routes.dashboard} />
       <div className="flex items-center gap-1.5">
         <PageLink
           to={notifications}

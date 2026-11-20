@@ -9,7 +9,6 @@ export const iconNames = [
   'close',
   'user',
   'shield',
-  'sidebar',
   'bell',
   'sparkle',
   'settings',
@@ -27,7 +26,6 @@ export type IconName = (typeof iconNames)[number];
 // Line icons drawn on a 24 unit grid. They take their colour from the text colour.
 // The dashboard icons are copied from design/wireframe/dashboard.html; moon is new.
 const paths: Record<IconName, string> = {
-  sidebar: 'M6 4h12a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3zM9 4v16',
   bell: 'M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20a2 2 0 0 0 4 0',
   sparkle: 'M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z',
   settings:
