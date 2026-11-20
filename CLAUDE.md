@@ -16,26 +16,42 @@ Keep every code change as clean and scalable as possible while achieving what th
 
 ```
 design/
-  tokens/tokens.css        the one file for palette, fonts, borders, radii, shadows
-  wireframe/landing.html   frozen starting snapshot
-  README.md                how to change tokens
+  tokens/tokens.css          the one file for palette, fonts, borders, radii, shadows
+  wireframe/landing.html     frozen starting snapshot of the landing page
+  wireframe/dashboard.html   frozen starting snapshot of the member dashboard
+  README.md                  how to change tokens
 apps/web/
-  app/                     routes, globals.css, fonts.ts, styleguide/, coming-soon/
-  components/              one component per page section
-  components/ui/           Radix wrappers and plain primitives
-  content/                 copy, FAQ and synthetic sample data as typed data
-  lib/config.ts            brand name, feature flags
+  app/layout.tsx             html, body, fonts, global CSS, default metadata, skip link
+  app/(marketing)/           landing page, coming-soon/, styleguide/, site header and footer
+  app/(dashboard)/dashboard/ member dashboard layout and pages
+  components/                one component per landing page section
+  components/dashboard/      one component per dashboard section, plus the dashboard chrome
+  components/ui/             Radix wrappers and plain primitives
+  content/                   copy, FAQ, nav config and synthetic data as typed data
+  content/dashboard-nav.ts   every dashboard page, with its ready flag
+  content/demo/              synthetic demo member, results and plan
+  lib/config.ts              brand name, routes, feature flags
+  lib/health/                domain types and pure functions: statuses, scores, formatting
+  lib/member-data.ts         the one place dashboard pages read member data from
+  lib/theme.ts               the dashboard theme cookie
   scripts/check-contrast.mjs
-docs/                      architecture.md, branch-protection.md
+docs/                        architecture.md, branch-protection.md
 .claude/  .github/
 ```
+
+### Dashboard data
+
+- Dashboard pages never import `content/demo/`. They call the async functions in `lib/member-data.ts`, which read the demo content today. When sign-in and a database arrive, only that file changes. The landing page reads `content/demo/showcase.ts` directly, so it can never show a real member.
+- Results are shaped like FHIR Observations (`lib/health/types.ts`). Statuses are derived from a value and its reference range by `interpret()`, never typed by hand. Scores come from the demo formula in `lib/health/scores.ts`, which is not a clinical one.
+- Authentication will be one check in the dashboard layout. Nothing may assume a signed-out visitor.
+- Every dashboard destination is in `content/dashboard-nav.ts` with a `ready` flag. A page that is not ready renders disabled with a "Soon" label (`later` pages say "Coming later"), never as a link, so nothing leads to a 404. Shipping a screen means adding its route and flipping its flag.
 
 ### Reserved for later (do not create until needed: no folders, no .gitkeep)
 
 These follow docs/architecture.md, not Dispatch.
 
 - Phase 0 backend lives inside apps/web. No separate API app: endpoints are Next.js route handlers and server actions.
-- apps/web/lib/ports/ - one TypeScript interface per outside service: auth, billing, lab partner, mailer, AI drafts. Written when first used.
+- apps/web/lib/ports/ - one TypeScript interface per outside service: auth, billing, lab partner, mailer, AI drafts. Written when first used. The demo dashboard uses no outside service, so `lib/member-data.ts` reads typed content directly and there are no ports or adapters yet.
 - apps/web/lib/adapters/ - one implementation per port (Supabase auth, Stripe test mode, mock lab partner, and so on). Only adapters import vendor SDKs. Wired together in one composition file.
 - supabase/ - Supabase CLI migrations and a seed.sql of synthetic data. Separate identity and clinical schemas linked only by a random subject id, a versioned consent ledger, an append-only audit log, FHIR-shaped result tables. Ask before choosing a query layer.
 - infra/ (Phase 1) - infrastructure as code for the AWS Canada accounts (ca-central-1, ca-west-1). Tool chosen then.
@@ -45,12 +61,13 @@ packages/ and Turborepo come only when a second app needs shared code. Ask befor
 
 ## How the design evolves
 
-- The wireframe in `design/wireframe/landing.html` seeded the first build. It is a frozen snapshot. Do not edit it and do not treat it as current.
-- After the first build, the code and `design/tokens/tokens.css` are the source of truth.
+- The wireframes in `design/wireframe/` seeded the first builds: `landing.html` for the landing page and `dashboard.html` for the dashboard layout and Home. Both are frozen snapshots. Do not edit them and do not treat them as current.
+- After each first build, the code and `design/tokens/tokens.css` are the source of truth. Dashboard screens not built yet still start from `dashboard.html`.
 - The palette, fonts, borders and layout will keep changing, and new designs will be added that the wireframe never had. Tokens exist to make common changes one-line edits. They are defaults, never a reason to refuse or flatten a new design.
 - Components use role tokens by default. Any component may use a named value directly.
 - One-off values inside a component are allowed for experiments. Mark them `// one-off:` with a reason so they can be promoted to tokens if they stick.
-- `data-theme="dark"` on any element re-points the colour roles inside it. A `data-style="..."` attribute may re-point font, border or radius roles the same way. See `design/README.md`.
+- `data-theme="dark"` on any element re-points the colour roles inside it. A `data-style="..."` attribute may re-point font, border or radius roles the same way. The dashboard root carries `data-style="app"`, which adds the dashboard's own dark surface, border, button and accent. See `design/README.md`.
+- The dashboard has a light and dark toggle. The choice is kept in one cookie holding only `light` or `dark`, scoped to `/dashboard`. Without it the dashboard follows the system setting. The landing page never changes theme.
 - All fonts load in `apps/web/app/fonts.ts` with `next/font`. No runtime requests to a font host.
 
 ## UI components
@@ -75,7 +92,7 @@ packages/ and Turborepo come only when a second app needs shared code. Ask befor
 - pnpm only. Never npm, npx or yarn in scripts, hooks, CI or docs.
 - `pnpm start` runs the dev server. `pnpm format`, `pnpm lint`, `pnpm typecheck` and `pnpm build` must pass before a change is handed over.
 - Biome is the only linter and formatter. `design/` is not linted.
-- `pnpm check:contrast` reports WCAG AA contrast for role pairs. It never fails the build and is not part of CI.
+- `pnpm check:contrast` reports WCAG AA contrast for role pairs in light, dark and dashboard dark. It never fails the build and is not part of CI.
 - Imports inside `apps/web` are relative. There is no path alias, because the root `tsc` run would not see one.
 
 ## Branch workflow
@@ -105,8 +122,9 @@ packages/ and Turborepo come only when a second app needs shared code. Ask befor
 
 ## Privacy guardrails
 
-- Collect no personal or health information. No analytics, tracking pixels or third-party scripts.
+- Collect no personal or health information. No analytics, tracking pixels or third-party scripts. The only stored value is the dashboard theme cookie.
 - Calls to action go to `/coming-soon`. Any waitlist form is rendered disabled, with a note that it is a demo.
-- Sample results must be obviously synthetic and labelled as such in `content/`.
-- The footer carries a visible line saying this is a concept project, not a real testing service, and that no real data is collected.
+- Sample results must be obviously synthetic and labelled as such in `content/`. Every file in `content/demo/` starts with `// SYNTHETIC DEMO DATA`.
+- The footer carries a visible line saying this is a concept project, not a real testing service, and that no real data is collected. On dashboard pages the demo banner carries it instead.
+- The dashboard is a demo with no sign-in, marked `noindex`. Buttons that would act in a real product are disabled with a short demo note.
 - Add no medical claims that are not already in the product copy. Keep placeholders as clearly marked placeholders. Do not invent content.

@@ -1,6 +1,10 @@
 # Design
 
-`tokens/tokens.css` is the one file for palette, fonts, type sizes, borders, radii, shadows and motion. `wireframe/landing.html` is the frozen snapshot the first build started from. The code and the tokens are now the source of truth.
+`tokens/tokens.css` is the one file for palette, fonts, type sizes, borders, radii, shadows and motion.
+
+`wireframe/` holds two frozen snapshots: `landing.html` seeded the landing page and `dashboard.html` seeded the member dashboard's layout and Home page. Do not edit them. For anything already built, the code and the tokens are the source of truth. Dashboard screens not built yet still start from `dashboard.html`.
+
+Dashboard links to screens that do not exist yet come from `apps/web/content/dashboard-nav.ts`. Each page there has a `ready` flag: until it is `true`, the page renders disabled with a "Soon" label instead of as a link.
 
 ## How the tokens file works
 
@@ -60,6 +64,12 @@ Colour: put `data-theme="dark"` on any element. Every role inside it switches to
 ```
 
 `data-theme="light"` switches back to the light roles inside a dark band, as the light dashboard card in the dark hero does. Its block in `tokens.css` repeats the light colour roles, so when you change a light colour role, change it in both places.
+
+The member dashboard sets `data-theme` on its root from the visitor's light or dark choice, and also carries `data-style="app"`. In dark, the `[data-style="app"][data-theme="dark"]` block gives the dashboard its own surface, border, button and accent, as the dashboard wireframe draws them, while the landing page's dark bands keep theirs. To change the dashboard's dark look, edit that block.
+
+### Status colours
+
+`status-good`, `status-neutral`, `status-warn` and `status-flag` mark the four result statuses: optimal, in range, borderline and out of range. They colour dots, range-bar zones and chart marks only. Status labels always stay in the text colour, so the status colours never need to pass as text.
 
 Fonts, borders and radii work the same way with `data-style`. Add a block to `tokens.css` that re-points only the roles you want to change, then put the attribute on a section:
 

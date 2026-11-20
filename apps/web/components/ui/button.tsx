@@ -3,7 +3,7 @@ import type { ComponentProps } from 'react';
 import { cn } from '../../lib/cn';
 
 export const buttonVariants = ['primary', 'outline'] as const;
-export const buttonSizes = ['sm', 'md', 'lg'] as const;
+export const buttonSizes = ['xs', 'sm', 'md', 'lg'] as const;
 export type ButtonVariant = (typeof buttonVariants)[number];
 export type ButtonSize = (typeof buttonSizes)[number];
 
@@ -13,18 +13,21 @@ const variants: Record<ButtonVariant, string> = {
 };
 
 const sizes: Record<ButtonSize, string> = {
-  sm: 'h-11 px-5.5 text-15',
+  xs: 'h-9 gap-1.5 px-3.5 text-13',
+  sm: 'h-11 gap-2 px-5.5 text-15',
   md: 'h-13 px-7 text-16',
   lg: 'h-14 px-7 text-16',
 };
 
 type StyleProps = { variant?: ButtonVariant; size?: ButtonSize; className?: string };
 
-function buttonClassName({ variant = 'primary', size = 'md', className }: StyleProps) {
+// exported so a link that is not ready yet can wear the same look
+export function buttonClassName({ variant = 'primary', size = 'md', className }: StyleProps) {
   return cn(
     'inline-flex items-center justify-center whitespace-nowrap rounded-button font-medium leading-flat',
     'transition-colors duration-(--duration-fast) motion-reduce:transition-none',
     'disabled:cursor-not-allowed disabled:opacity-50',
+    'aria-disabled:cursor-not-allowed aria-disabled:opacity-50',
     variants[variant],
     sizes[size],
     className,

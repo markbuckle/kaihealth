@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
-import { AccentText } from '../../components/ui/accent-text';
-import { Button, ButtonLink } from '../../components/ui/button';
-import { Eyebrow } from '../../components/ui/eyebrow';
-import { Section } from '../../components/ui/section';
-import { comingSoon } from '../../content/coming-soon';
+import { AccentText } from '../../../components/ui/accent-text';
+import { Button, ButtonLink } from '../../../components/ui/button';
+import { Eyebrow } from '../../../components/ui/eyebrow';
+import { Section } from '../../../components/ui/section';
+import { comingSoon } from '../../../content/coming-soon';
 
 export const metadata: Metadata = {
   title: 'Coming soon',

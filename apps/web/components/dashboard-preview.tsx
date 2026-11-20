@@ -1,5 +1,6 @@
+import { demoClinicianNote } from '../content/demo/clinician-note';
+import { showcaseSeries } from '../content/demo/showcase';
 import { dashboardPreview, hero } from '../content/landing';
-import { sampleBiomarkers, sampleClinicianNote } from '../content/sample-results';
 import { BiomarkerCard } from './ui/biomarker-card';
 import { Card } from './ui/card';
 import { Eyebrow } from './ui/eyebrow';
@@ -18,15 +19,15 @@ export function DashboardPreview() {
         lead={dashboardPreview.lead}
       />
       <div className="mt-12 grid items-start gap-6 md:grid-cols-2 lg:mt-16 lg:grid-cols-3">
-        {sampleBiomarkers.map((biomarker) => (
-          <BiomarkerCard key={biomarker.id} biomarker={biomarker} sampleLabel={sampleLabel} />
+        {showcaseSeries.map((series) => (
+          <BiomarkerCard key={series.biomarker.id} series={series} sampleLabel={sampleLabel} />
         ))}
       </div>
       <Card className="mt-6 flex flex-col gap-5 px-6 py-7 sm:flex-row sm:items-center sm:gap-6 lg:mt-16 lg:px-8">
         <Placeholder className="size-18" />
         <div className="flex flex-col gap-1.5">
           <Eyebrow>{`${dashboardPreview.noteLabel} · ${sampleLabel}`}</Eyebrow>
-          <p className="text-17">{sampleClinicianNote}</p>
+          <p className="text-17">{demoClinicianNote.body}</p>
         </div>
       </Card>
     </Section>

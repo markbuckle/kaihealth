@@ -1,7 +1,10 @@
 import { cn } from '../../lib/cn';
 
 const variants = {
-  avatar: 'rounded-round',
+  // a dashed circle for a portrait
+  avatar: 'rounded-round border-dashed bg-text/12 text-10 tracking-label',
+  // a flat block for a photo or illustration; it fills its box, so size it with className
+  media: 'bg-surface text-11 tracking-tag',
 } as const;
 
 export type PlaceholderVariant = keyof typeof variants;
@@ -21,8 +24,7 @@ export function Placeholder({
       role="img"
       aria-label={`${label} placeholder`}
       className={cn(
-        'flex shrink-0 items-center justify-center border-dashed bg-text/12',
-        'font-label text-10 text-text-muted uppercase tracking-label',
+        'flex shrink-0 items-center justify-center font-label text-text-muted uppercase',
         variants[variant],
         className,
       )}

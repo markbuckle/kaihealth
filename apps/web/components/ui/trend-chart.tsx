@@ -1,5 +1,8 @@
-import { type Biomarker, formatValue, type Status } from '../../content/sample-results';
 import { cn } from '../../lib/cn';
+import { formatShortMonthYear } from '../../lib/health/format';
+import { formatValue, optimalEdge } from '../../lib/health/results';
+import { statusLabels } from '../../lib/health/status';
+import type { ResultSeries, Status } from '../../lib/health/types';
 
 export const trendChartVariants = ['default'] as const;
 export type TrendChartVariant = (typeof trendChartVariants)[number];
@@ -14,9 +17,22 @@ const frame = { width: 320, height: 124, left: 34, right: 286, top: 12, bottom: 
 const labelSize = 8.5;
 
 const latestTones: Record<Status, { outer: string; inner: string; dot: string }> = {
-  good: { outer: 'fill-status-good/14', inner: 'fill-status-good/26', dot: 'fill-status-good' },
-  warn: { outer: 'fill-status-warn/14', inner: 'fill-status-warn/26', dot: 'fill-status-warn' },
-  flag: { outer: 'fill-status-flag/14', inner: 'fill-status-flag/26', dot: 'fill-status-flag' },
+  optimal: { outer: 'fill-status-good/14', inner: 'fill-status-good/26', dot: 'fill-status-good' },
+  'in-range': {
+    outer: 'fill-status-neutral/14',
+    inner: 'fill-status-neutral/26',
+    dot: 'fill-status-neutral',
+  },
+  borderline: {
+    outer: 'fill-status-warn/14',
+    inner: 'fill-status-warn/26',
+    dot: 'fill-status-warn',
+  },
+  'out-of-range': {
+    outer: 'fill-status-flag/14',
+    inner: 'fill-status-flag/26',
+    dot: 'fill-status-flag',
+  },
 };
 
 // Leaves more room below the lowest value than above the highest, as the wireframe does,
@@ -31,17 +47,27 @@ function yScale(values: number[]) {
     frame.top + (1 - (value - min) / (max - min)) * (frame.bottom - frame.top);
 }
 
+// The line through each test, with the edge of the optimal zone as a dashed target line.
 export function TrendChart({
-  biomarker,
+  series,
   variant = 'default',
   className,
 }: {
-  biomarker: Biomarker;
+  series: ResultSeries;
   variant?: TrendChartVariant;
   className?: string;
 }) {
-  const { history, reference, status, unit, name } = biomarker;
-  const toY = yScale([...history.map((point) => point.value), reference.value]);
+  const { biomarker, observations } = series;
+  const history = observations.map((observation) => ({
+    date: formatShortMonthYear(observation.effectiveDateTime),
+    value: observation.valueQuantity.value,
+  }));
+  const latestObservation = observations.at(-1);
+  if (!latestObservation) return null;
+
+  const unit = biomarker.unit.display;
+  const reference = optimalEdge(biomarker, latestObservation.valueQuantity.value);
+  const toY = yScale([...history.map((point) => point.value), reference ?? 0]);
   const step = (frame.right - frame.left) / Math.max(history.length - 1, 1);
   const points = history.map((point, index) => ({
     ...point,
@@ -49,15 +75,17 @@ export function TrendChart({
     y: toY(point.value),
   }));
   const latest = points.at(-1);
-  const referenceY = toY(reference.value);
-  // the reference label sits under its line unless that would push it off the chart
-  const labelY = referenceY + 13 > frame.bottom ? referenceY - 5 : referenceY + 13;
+  const referenceY = reference === null ? null : toY(reference);
   const line = points.map((point) => `${point.x},${point.y}`).join(' ');
   const area = `${frame.left},${frame.bottom} ${line} ${latest?.x ?? frame.right},${frame.bottom}`;
-  const description = `${name} across ${history.length} tests: ${history
+  const description = `${biomarker.name} across ${history.length} tests: ${history
     .map((point) => `${point.date} ${formatValue(biomarker, point.value)} ${unit}`)
-    .join(', ')}. ${reference.label} is ${formatValue(biomarker, reference.value)} ${unit}.`;
-  const tone = latestTones[status];
+    .join(', ')}.${
+    reference === null
+      ? ''
+      : ` The edge of the ${statusLabels.optimal.toLowerCase()} range is ${formatValue(biomarker, reference)} ${unit}.`
+  }`;
+  const tone = latestTones[latestObservation.interpretation.status];
 
   return (
     <svg
@@ -66,22 +94,27 @@ export function TrendChart({
       aria-label={description}
       className={cn(variants[variant], className)}
     >
-      <line
-        x1="0"
-        x2={frame.width}
-        y1={referenceY}
-        y2={referenceY}
-        strokeDasharray="3 4"
-        className="stroke-status-good/55"
-      />
-      <text
-        x="8"
-        y={labelY}
-        fontSize={labelSize}
-        className="fill-status-good font-label uppercase tracking-tag"
-      >
-        {reference.label}
-      </text>
+      {referenceY === null ? null : (
+        <>
+          <line
+            x1="0"
+            x2={frame.width}
+            y1={referenceY}
+            y2={referenceY}
+            strokeDasharray="3 4"
+            className="stroke-status-good/55"
+          />
+          <text
+            x="8"
+            // the label sits under its line unless that would push it off the chart
+            y={referenceY + 13 > frame.bottom ? referenceY - 5 : referenceY + 13}
+            fontSize={labelSize}
+            className="fill-text-muted font-label uppercase tracking-tag"
+          >
+            {statusLabels.optimal}
+          </text>
+        </>
+      )}
       <polygon points={area} className="fill-accent/14" />
       {points.map((point) => (
         <line
@@ -111,7 +144,7 @@ export function TrendChart({
                 cy={point.y}
                 r="4.5"
                 strokeWidth="2"
-                className={cn('stroke-page', tone.dot)}
+                className={cn('stroke-card', tone.dot)}
               />
             </>
           ) : (
@@ -120,7 +153,7 @@ export function TrendChart({
               cy={point.y}
               r="4"
               strokeWidth="2"
-              className="fill-page stroke-accent"
+              className="fill-card stroke-accent"
             />
           )}
           <text

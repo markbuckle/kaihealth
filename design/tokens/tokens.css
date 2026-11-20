@@ -24,11 +24,15 @@
 
   /* palette: named by hue and step, higher step is darker */
   --color-neutral-0: #fcfcfb;
-  --color-neutral-100: #eceae8;
+  --color-neutral-100: #f3efec;
   --color-neutral-300: #cfccc9;
   --color-neutral-400: #a9a6a3;
+  --color-neutral-450: #9a9895;
   --color-neutral-500: #828282;
   --color-neutral-600: #5e5c5a;
+  /* 700 and 750 are close on purpose: the dashboard wireframe uses one for dark borders, one for dark surfaces */
+  --color-neutral-700: #3a3937;
+  --color-neutral-750: #353534;
   --color-neutral-800: #262625;
   --color-neutral-900: #1c1c1b;
 
@@ -44,13 +48,16 @@
   --color-purple-600: #96479a;
   --color-indigo-700: #44488b;
 
-  /* status: the darker steps are for light bands, the lighter steps pass 4.5:1 on dark bands */
-  --color-green-500: #289f78;
-  --color-green-700: #1f7a5c;
-  --color-amber-500: #c27e00;
-  --color-amber-800: #8a5a00;
-  --color-red-400: #d76c72;
-  --color-red-600: #b8323a;
+  /*
+    status: the 500 steps are for light surfaces, the 400 steps for dark ones. They colour dots,
+    zones and chart marks only. Status labels stay in the text colour, so these never carry text.
+  */
+  --color-green-400: #4cc38a;
+  --color-green-500: #3daa85;
+  --color-amber-400: #f2b84b;
+  --color-amber-500: #e0a93b;
+  --color-red-400: #ff7a6b;
+  --color-red-500: #e5675f;
 
   /* font families: the --font-geist style variables are set by next/font in apps/web/app/fonts.ts */
   --font-serif: var(--font-instrument-serif), Georgia, serif;
@@ -69,9 +76,13 @@
   --text-18: 1.125rem;
   --text-20: 1.25rem;
   --text-24: 1.5rem;
+  --text-26: 1.625rem;
   --text-28: 1.75rem;
+  --text-32: 2rem;
   --text-36: 2.25rem;
   --text-40: 2.5rem;
+  --text-44: 2.75rem;
+  --text-52: 3.25rem;
   --text-56: 3.5rem;
   --text-64: 4rem;
   --text-96: 6rem;
@@ -98,6 +109,7 @@
   --spacing-gutter-compact: 1.25rem;
   --spacing-gutter-medium: 2.5rem;
   --spacing-gutter-roomy: 7.5rem;
+  --spacing-sidebar: 16.5rem;
 
   /* widths (max-w-content); Tailwind's own sizes such as max-w-md are also available */
   --container-content: 75rem;
@@ -142,6 +154,10 @@
    --------------------------------------------------------------------------- */
 @theme static {
   --color-page: var(--color-neutral-0);
+  /* raised panels; the same as the page in light, one step up from it in dark */
+  --color-card: var(--color-neutral-0);
+  /* the background behind the dashboard's cards, so they stand out from it */
+  --color-canvas: var(--color-neutral-100);
   --color-surface: var(--color-neutral-100);
   --color-text: var(--color-neutral-900);
   --color-text-muted: var(--color-neutral-600);
@@ -151,9 +167,11 @@
   --color-link: var(--color-teal-700);
   --color-accent: var(--color-teal-600);
 
-  --color-status-good: var(--color-green-700);
-  --color-status-warn: var(--color-amber-800);
-  --color-status-flag: var(--color-red-600);
+  /* optimal, in range, borderline and out of range */
+  --color-status-good: var(--color-green-500);
+  --color-status-neutral: var(--color-neutral-450);
+  --color-status-warn: var(--color-amber-500);
+  --color-status-flag: var(--color-red-500);
 
   /* artwork colours do not change with the theme */
   --color-swirl-1: var(--color-yellow-500);
@@ -200,6 +218,8 @@
    --------------------------------------------------------------------------- */
 [data-theme="dark"] {
   --color-page: var(--color-neutral-900);
+  --color-card: var(--color-neutral-800);
+  --color-canvas: var(--color-neutral-900);
   --color-surface: var(--color-neutral-800);
   --color-text: var(--color-neutral-0);
   --color-text-muted: var(--color-neutral-400);
@@ -209,9 +229,22 @@
   --color-link: var(--color-sky-300);
   --color-accent: var(--color-sky-300);
 
-  --color-status-good: var(--color-green-500);
-  --color-status-warn: var(--color-amber-500);
+  --color-status-good: var(--color-green-400);
+  --color-status-neutral: var(--color-neutral-400);
+  --color-status-warn: var(--color-amber-400);
   --color-status-flag: var(--color-red-400);
+}
+
+/*
+  The member dashboard's dark mode. data-style="app" sits on the dashboard root next to
+  data-theme. The landing page's dark bands keep the roles above, while the dashboard
+  wireframe uses a raised surface, quieter borders and teal buttons.
+*/
+[data-style="app"][data-theme="dark"] {
+  --color-surface: var(--color-neutral-750);
+  --color-border: var(--color-neutral-700);
+  --color-button: var(--color-teal-500);
+  --color-accent: var(--color-teal-500);
 }
 
 /*
@@ -221,6 +254,8 @@
 */
 [data-theme="light"] {
   --color-page: var(--color-neutral-0);
+  --color-card: var(--color-neutral-0);
+  --color-canvas: var(--color-neutral-100);
   --color-surface: var(--color-neutral-100);
   --color-text: var(--color-neutral-900);
   --color-text-muted: var(--color-neutral-600);
@@ -230,7 +265,8 @@
   --color-link: var(--color-teal-700);
   --color-accent: var(--color-teal-600);
 
-  --color-status-good: var(--color-green-700);
-  --color-status-warn: var(--color-amber-800);
-  --color-status-flag: var(--color-red-600);
+  --color-status-good: var(--color-green-500);
+  --color-status-neutral: var(--color-neutral-450);
+  --color-status-warn: var(--color-amber-500);
+  --color-status-flag: var(--color-red-500);
 }

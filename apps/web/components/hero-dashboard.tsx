@@ -1,24 +1,20 @@
+import { showcaseCounts, showcaseSeries } from '../content/demo/showcase';
 import { hero } from '../content/landing';
-import {
-  formatValue,
-  type Status,
-  sampleBiomarkers,
-  sampleSummary,
-  statusLabels,
-} from '../content/sample-results';
 import { cn } from '../lib/cn';
+import { formatValue } from '../lib/health/results';
+import { statusLabels } from '../lib/health/status';
+import { type Status, statuses } from '../lib/health/types';
 import { BiomarkerCard } from './ui/biomarker-card';
 import { Card } from './ui/card';
 import { Chip } from './ui/chip';
 import { Eyebrow } from './ui/eyebrow';
 import { StatusPill } from './ui/status-pill';
 
-const statusOrder: Status[] = ['good', 'warn', 'flag'];
-
 const dotTones: Record<Status, string> = {
-  good: 'bg-status-good',
-  warn: 'bg-status-warn',
-  flag: 'bg-status-flag',
+  optimal: 'bg-status-good',
+  'in-range': 'bg-status-neutral',
+  borderline: 'bg-status-warn',
+  'out-of-range': 'bg-status-flag',
 };
 
 const copy = hero.dashboard;
@@ -51,21 +47,31 @@ function CompactDashboard() {
         </Eyebrow>
       </div>
       <ul>
-        {sampleBiomarkers.map((biomarker) => (
-          <li key={biomarker.id} className="flex items-center gap-2.5 border-border border-t py-3">
-            <span className="flex-1 text-14">{biomarker.name}</span>
-            <span className="font-label text-13">{formatValue(biomarker)}</span>
-            <StatusPill status={biomarker.status} />
-          </li>
-        ))}
+        {showcaseSeries.map(({ biomarker, observations }) => {
+          const latest = observations.at(-1);
+          if (!latest) return null;
+          const { status } = latest.interpretation;
+          return (
+            <li
+              key={biomarker.id}
+              className="flex items-center gap-2.5 border-border border-t py-3"
+            >
+              <span className="flex-1 text-14">{biomarker.name}</span>
+              <span className="font-label text-13">
+                {formatValue(biomarker, latest.valueQuantity.value)}
+              </span>
+              <StatusPill status={status} />
+            </li>
+          );
+        })}
       </ul>
     </Card>
   );
 }
 
 function FullDashboard() {
-  const [featured, ...others] = sampleBiomarkers;
-  const total = statusOrder.reduce((sum, status) => sum + sampleSummary[status], 0);
+  const [featured, ...others] = showcaseSeries;
+  const total = statuses.reduce((sum, status) => sum + showcaseCounts[status], 0);
 
   return (
     <Card className="hidden overflow-hidden lg:block">
@@ -86,16 +92,16 @@ function FullDashboard() {
             <span className="text-14 text-text-muted">{copy.totalLabel}</span>
           </p>
           <div aria-hidden="true" className="flex gap-0.75">
-            {statusOrder.map((status) => (
+            {statuses.map((status) => (
               <span
                 key={status}
                 className={cn('h-2 rounded-pill', dotTones[status])}
-                style={{ flexGrow: sampleSummary[status] }}
+                style={{ flexGrow: showcaseCounts[status] }}
               />
             ))}
           </div>
           <ul className="border-border border-b">
-            {statusOrder.map((status) => (
+            {statuses.map((status) => (
               <li
                 key={status}
                 className="flex items-center gap-2.5 border-border border-t py-3 text-15"
@@ -105,17 +111,17 @@ function FullDashboard() {
                   className={cn('size-2.5 rounded-round', dotTones[status])}
                 />
                 <span className="flex-1">{statusLabels[status]}</span>
-                <span className="font-label">{sampleSummary[status]}</span>
+                <span className="font-label">{showcaseCounts[status]}</span>
               </li>
             ))}
           </ul>
           <Eyebrow variant="card">{copy.sampleLabel}</Eyebrow>
         </div>
         <div className={cn('grid min-w-0 flex-1 items-start gap-4 bg-surface p-7', resultsColumns)}>
-          {featured ? <BiomarkerCard biomarker={featured} sampleLabel={copy.sampleLabel} /> : null}
+          {featured ? <BiomarkerCard series={featured} sampleLabel={copy.sampleLabel} /> : null}
           <div className="flex flex-col gap-4">
-            {others.map((biomarker) => (
-              <BiomarkerCard key={biomarker.id} biomarker={biomarker} variant="compact" />
+            {others.map((series) => (
+              <BiomarkerCard key={series.biomarker.id} series={series} variant="compact" />
             ))}
           </div>
         </div>

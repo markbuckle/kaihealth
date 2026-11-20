@@ -1,7 +1,5 @@
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { SiteFooter } from '../components/site-footer';
-import { SiteHeader } from '../components/site-header';
 import { siteConfig } from '../lib/config';
 import { fontVariables } from './fonts';
 import './globals.css';
@@ -26,6 +24,8 @@ export const metadata: Metadata = {
   },
 };
 
+// Shared by every route group. Each group's layout renders its own chrome and a
+// <main id="main"> for the skip link to land on.
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang={siteConfig.locale} className={fontVariables}>
@@ -36,9 +36,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         >
           Skip to content
         </a>
-        <SiteHeader />
-        <main id="main">{children}</main>
-        <SiteFooter />
+        {children}
       </body>
     </html>
   );
