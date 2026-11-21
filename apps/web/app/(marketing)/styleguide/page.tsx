@@ -231,7 +231,7 @@ export default function StyleguidePage() {
               <Row label="icon button">
                 {iconButtonVariants.map((variant) => (
                   <IconButton key={variant} variant={variant} aria-label={`variant ${variant}`}>
-                    <Icon name="settings" />
+                    <Icon name="sun" />
                   </IconButton>
                 ))}
               </Row>

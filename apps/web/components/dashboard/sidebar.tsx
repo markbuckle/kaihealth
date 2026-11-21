@@ -7,6 +7,7 @@ import { type DashboardPage, type SidebarEntry, sidebarNav } from '../../content
 import { cn } from '../../lib/cn';
 import { Icon } from '../ui/icon';
 import { IconButton } from '../ui/icon-button';
+import { NavIcon } from '../ui/nav-icon';
 import { PageLink, SoonLabel } from './page-link';
 
 const itemStyles = {
@@ -15,6 +16,8 @@ const itemStyles = {
 } as const;
 
 type Level = keyof typeof itemStyles;
+
+const iconStyles = { top: 'size-5', sub: 'size-4' } as const satisfies Record<Level, string>;
 
 // Sub-pages are quieter than top-level pages, and pages that are not ready are quieter still.
 function tone(page: DashboardPage, level: Level, current: boolean): string {
@@ -36,6 +39,7 @@ function NavItem({ page, level }: { page: DashboardPage; level: Level }) {
         tone(page, level, current),
       )}
     >
+      {page.icon ? <NavIcon name={page.icon} className={iconStyles[level]} /> : null}
       {page.label}
       <SoonLabel to={page} className="ml-auto" />
     </PageLink>
@@ -55,7 +59,7 @@ function NavGroup({ entry }: { entry: Extract<SidebarEntry, { type: 'group' }> }
           aria-controls={listId}
           aria-label={dashboardChrome.groupToggle(entry.page.label)}
           onClick={() => setOpen((value) => !value)}
-          className="size-10"
+          className="size-8!"
         >
           <Icon
             name="chevron-down"
