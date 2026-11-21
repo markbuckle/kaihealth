@@ -40,7 +40,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
         <Sidebar />
         <main
           id="main"
-          className="min-w-0 flex-1 bg-canvas px-4 pt-5 pb-8 md:px-8 lg:px-12 lg:pt-10 lg:pb-24"
+          className="min-w-0 flex-1 bg-canvas bg-(image:--canvas-glow) bg-no-repeat px-4 pt-5 pb-8 md:px-8 lg:px-12 lg:pt-10 lg:pb-24"
         >
           <div className="max-w-content">{children}</div>
         </main>

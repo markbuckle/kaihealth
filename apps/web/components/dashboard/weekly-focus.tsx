@@ -16,8 +16,9 @@ export function WeeklyFocus({ focus }: { focus: HomeSummary['focus'] }) {
   return (
     <Card
       as="section"
+      variant="lit"
       aria-labelledby="focus-title"
-      className="flex flex-col overflow-hidden md:flex-row md:flex-wrap"
+      className="flex flex-col overflow-hidden [--border-lit:var(--border-lit-top-left)] md:flex-row md:flex-wrap"
     >
       <Placeholder
         variant="media"

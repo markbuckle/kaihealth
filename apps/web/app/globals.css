@@ -38,3 +38,17 @@
 @utility border-card {
   border: var(--border-card) var(--color-border);
 }
+
+/*
+  A card whose border is drawn by the background, so --border-lit can show through it. The card
+  colour fills the padding box and the border role colours the rest, so with no --border-lit (it
+  is only set inside the dashboard) it looks like border-card on bg-card.
+*/
+@utility border-lit {
+  border: var(--border-card) transparent;
+  background-color: var(--color-border);
+  background-image: linear-gradient(var(--color-card), var(--color-card)), var(--border-lit, none);
+  background-origin: border-box;
+  /* one entry per layer: the fill, then up to two highlights. The last layer's clip also sets where the colour paints */
+  background-clip: padding-box, border-box, border-box;
+}

@@ -14,10 +14,24 @@ import { SectionHeading } from './section-heading';
 const copy = home.plan;
 const { plan: fullPlan, planPriorities } = dashboardPages;
 
-function PlanCard({ item }: { item: PlanItem }) {
+// each card in a row of three lights a different part of its bottom border
+const bottomGlows = [
+  '[--border-lit:var(--border-lit-bottom-left)]',
+  '[--border-lit:var(--border-lit-bottom-lean-right)]',
+  '[--border-lit:var(--border-lit-bottom-lean-left)]',
+] as const;
+
+function PlanCard({ item, position }: { item: PlanItem; position: number }) {
   const page = recommendationPage(item.id, item.title);
   return (
-    <Card as="li" className="flex flex-col gap-2 p-4 md:gap-2.5 md:p-5">
+    <Card
+      as="li"
+      variant="lit"
+      className={cn(
+        'flex flex-col gap-2 p-4 md:gap-2.5 md:p-5',
+        bottomGlows[position % bottomGlows.length],
+      )}
+    >
       <div className="flex justify-between gap-3">
         <Eyebrow as="span" variant="card">
           {item.categoryLabel}
@@ -58,8 +72,8 @@ function PlanCards({ items, emptyLabel }: { items: PlanItem[]; emptyLabel?: stri
   }
   return (
     <ul className="grid gap-3 md:grid-cols-2 md:gap-4 xl:grid-cols-3">
-      {items.map((item) => (
-        <PlanCard key={item.id} item={item} />
+      {items.map((item, index) => (
+        <PlanCard key={item.id} item={item} position={index} />
       ))}
     </ul>
   );

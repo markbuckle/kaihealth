@@ -1,14 +1,16 @@
 import type { HTMLAttributes } from 'react';
 import { cn } from '../../lib/cn';
 
-export const cardVariants = ['outlined', 'row', 'tile'] as const;
+export const cardVariants = ['outlined', 'lit', 'row', 'tile'] as const;
 export type CardVariant = (typeof cardVariants)[number];
 
 const variants: Record<CardVariant, string> = {
   // bordered panel on the card colour, which is the page colour in light
-  outlined: 'rounded-card border-card bg-card',
+  outlined: 'rounded-card border-card bg-card shadow-(--shadow-card)',
+  // outlined, with a highlight along the top of the border in dark (--border-lit in tokens.css)
+  lit: 'rounded-card border-lit shadow-(--shadow-card-lit)',
   // smaller radius for list rows
-  row: 'rounded-inset border-card',
+  row: 'rounded-inset border-card shadow-(--shadow-card)',
   // borderless panel on the surface colour
   tile: 'rounded-card bg-surface',
 };
