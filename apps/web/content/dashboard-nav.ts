@@ -29,7 +29,7 @@ const later = (label: string, path: string): DashboardPage => ({
 export const dashboardPages = {
   summary: page('Summary', '', true),
   results: page('Results', '/results'),
-  areas: page('Health areas', '/areas'),
+  areas: page('Categories', '/areas'),
   areaPriorities: page('Priorities', '/areas/priorities'),
   plan: page('Action plan', '/plan'),
   planPriorities: page('Priorities', '/plan/priorities'),
