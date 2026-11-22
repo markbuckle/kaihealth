@@ -15,6 +15,7 @@ export const dashboardChrome = {
   darkMode: 'Dark mode',
   more: 'More',
   close: 'Close',
+  dismissBanner: 'Hide this notice',
   notifications: (count: number) => `Notifications, ${count} new`,
   account: (name: string) => `Account: ${name}`,
   mainNav: 'Main',
@@ -43,7 +44,7 @@ export const home = {
     eyebrow: 'Overall health score',
     title: 'How this is calculated',
     intro: (areaCount: string) =>
-      `combines your ${areaCount} health area scores. Areas with a bigger effect on long-term health, like Heart and Metabolic, count for more.`,
+      `combines your ${areaCount} category scores. Areas with a bigger effect on long-term health, like Heart and Metabolic, count for more.`,
     introLead: 'Your score of',
     holdingBack: 'Holding your score back',
     helping: 'Helping your score',
@@ -69,9 +70,9 @@ export const home = {
     reviewed: (date: string, clinician: string) => `Reviewed ${date} by ${clinician}`,
   },
   areas: {
-    title: 'Your health areas',
+    title: 'Your categories',
     lead: 'Ranked by where focus will help most.',
-    viewAll: 'View all health areas',
+    viewAll: 'View all categories',
     viewAllShort: 'View all',
     rank: (rank: number) => `#${rank} focus`,
     outOf: '/100',

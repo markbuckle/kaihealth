@@ -1,4 +1,5 @@
 import type { IconName } from '../components/ui/icon';
+import type { NavIconName } from '../components/ui/nav-icon';
 import { routes } from '../lib/config';
 import { type AreaId, healthAreas } from '../lib/health/areas';
 import { type PlanCategoryId, planCategories } from '../lib/health/plan';
@@ -13,28 +14,31 @@ export type DashboardPage = {
   ready: boolean;
   // planned for the product but not offered yet: shows "Coming later" instead of "Soon"
   later?: boolean;
+  // drawn to the left of the label in the sidebar
+  icon?: NavIconName;
 };
 
-const page = (label: string, path: string, ready = false): DashboardPage => ({
+const page = (label: string, path: string, icon?: NavIconName, ready = false): DashboardPage => ({
   label,
   href: `${routes.dashboard}${path}`,
   ready,
+  icon,
 });
 
-const later = (label: string, path: string): DashboardPage => ({
-  ...page(label, path),
+const later = (label: string, path: string, icon?: NavIconName): DashboardPage => ({
+  ...page(label, path, icon),
   later: true,
 });
 
 export const dashboardPages = {
-  summary: page('Summary', '', true),
+  summary: page('Summary', '', 'summary', true),
   results: page('Results', '/results'),
-  areas: page('Health areas', '/areas'),
-  areaPriorities: page('Priorities', '/areas/priorities'),
-  plan: page('Action plan', '/plan'),
-  planPriorities: page('Priorities', '/plan/priorities'),
-  records: page('Records', '/records'),
-  wearables: later('Wearables', '/wearables'),
+  areas: page('Categories', '/areas', 'areas'),
+  areaPriorities: page('Priorities', '/areas/priorities', 'priorities'),
+  plan: page('Action plan', '/plan', 'plan'),
+  planPriorities: page('Priorities', '/plan/priorities', 'plan-priorities'),
+  records: page('Records', '/records', 'records'),
+  wearables: later('Wearables', '/wearables', 'wearables'),
   messages: page('Messages', '/messages'),
   checkup: page('Your checkup', '/checkup'),
   notifications: page('Notifications', '/notifications'),
@@ -46,10 +50,10 @@ export const dashboardPages = {
 } satisfies Record<string, DashboardPage>;
 
 export const areaPage = (area: { id: AreaId; label: string }) =>
-  page(area.label, `/areas/${area.id}`);
+  page(area.label, `/areas/${area.id}`, area.id);
 
 export const planCategoryPage = (category: { id: PlanCategoryId; label: string }) =>
-  page(category.label, `/plan/${category.id}`);
+  page(category.label, `/plan/${category.id}`, category.id);
 
 export const recommendationPage = (id: string, title: string) =>
   page(title, `/plan/recommendations/${id}`);
@@ -69,8 +73,8 @@ export const sidebarNav: SidebarEntry[] = [
     items: [
       dashboardPages.areaPriorities,
       ...healthAreas.map(areaPage),
-      later('Cellular', '/areas/cellular'),
-      later('Neural', '/areas/neural'),
+      later('Cellular', '/areas/cellular', 'cellular'),
+      later('Neural', '/areas/neural', 'neural'),
     ],
   },
   {

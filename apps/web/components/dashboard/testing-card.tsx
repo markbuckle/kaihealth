@@ -86,6 +86,7 @@ export function TestingCard({
   return (
     <Card
       as="article"
+      variant="lit"
       aria-labelledby="testing-title"
       className="flex flex-col gap-3 p-5 md:gap-3.5 md:p-6"
     >

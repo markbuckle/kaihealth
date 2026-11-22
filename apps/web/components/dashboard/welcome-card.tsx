@@ -20,7 +20,17 @@ export function WelcomeCard({
   clinician: string;
 }) {
   return (
-    <Card as="section" aria-labelledby="welcome-title">
+    <Card
+      as="section"
+      variant="lit"
+      aria-labelledby="welcome-title"
+      className="relative isolate [--border-lit:var(--border-lit-split)]"
+    >
+      {/* the soft light behind the highlight on the top border; isolate keeps it above the card colour */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 -z-10 rounded-card bg-(image:--card-glow)"
+      />
       <div className="flex flex-col justify-center gap-2.5 p-5 md:gap-3.5 md:px-11 md:py-10">
         <Eyebrow variant="card" className="max-md:hidden">
           {copy.eyebrow}

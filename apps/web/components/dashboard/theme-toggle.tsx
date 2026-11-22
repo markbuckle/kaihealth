@@ -5,27 +5,30 @@ import { Icon } from '../ui/icon';
 import { iconButtonClassName } from '../ui/icon-button';
 import { useDashboardRoot } from './dashboard-root';
 
-// The pressed look keys off data-theme rather than React state, so it is right from the first
-// paint, before React knows the theme. A filled circle marks dark mode as on.
-const pressed = 'in-data-[theme=dark]:bg-surface';
-
+// The look keys off data-theme rather than React state, so it is right from the first
+// paint, before React knows the theme.
 const variants = {
   // a round icon button for the top bar
-  icon: { button: iconButtonClassName('plain', pressed), icon: '' },
-  // a full-width row with its label, for the mobile More menu
+  icon: { button: iconButtonClassName('plain', 'size-9!'), icon: '' },
+  // a full-width row with its label, for the mobile More menu; a filled circle marks dark as on
   row: {
     button: 'flex min-h-14 w-full cursor-pointer items-center justify-between text-16',
-    icon: iconButtonClassName('plain', pressed),
+    icon: iconButtonClassName('plain', 'in-data-[theme=dark]:bg-surface'),
   },
 } as const;
 
-// A "Dark mode" button that is pressed while the dashboard is dark. It keeps one moon icon,
-// because the wireframe's settings icon already looks like a sun.
+// One "Dark mode" button. The icon shows the theme it switches to: a moon in light mode,
+// a sun in dark mode.
 export function ThemeToggle({ variant = 'icon' }: { variant?: keyof typeof variants }) {
   const { theme, setTheme } = useDashboardRoot();
   const dark = theme === 'dark';
   const styles = variants[variant];
-  const icon = <Icon name="moon" />;
+  const icon = (
+    <>
+      <Icon name="moon" className="in-data-[theme=dark]:hidden" />
+      <Icon name="sun" className="hidden in-data-[theme=dark]:block" />
+    </>
+  );
   return (
     <button
       type="button"

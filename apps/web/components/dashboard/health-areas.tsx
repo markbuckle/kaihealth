@@ -15,6 +15,9 @@ const copy = home.areas;
 // the wireframe gives the first four areas large cards and the rest small ones
 const priorityCount = 4;
 
+// the first card of each group has a highlight down its left border
+const litBorder = '[--border-lit:var(--border-lit-left)]';
+
 // A large card from md up; a compact row below md, as the mobile wireframe draws it.
 function PriorityCard({
   area,
@@ -28,7 +31,13 @@ function PriorityCard({
   const page = areaPage(area);
   const status = <StatusPill variant="dot" status={area.status} />;
   return (
-    <PageLink to={page} className={cardClassName('outlined', 'block h-full text-text')}>
+    <PageLink
+      to={page}
+      className={cardClassName(
+        rank === 1 ? 'lit' : 'outlined',
+        cn('block h-full text-text', rank === 1 && litBorder),
+      )}
+    >
       <span className="flex items-center gap-3.5 p-4 md:hidden">
         <span className="w-13 shrink-0 font-heading text-36 leading-flat">{area.score}</span>
         <span className="flex min-w-0 flex-1 flex-col gap-0.75">
@@ -69,12 +78,15 @@ function PriorityCard({
   );
 }
 
-function OtherCard({ area }: { area: AreaSummary }) {
+function OtherCard({ area, lit }: { area: AreaSummary; lit: boolean }) {
   const page = areaPage(area);
   return (
     <PageLink
       to={page}
-      className={cardClassName('outlined', 'flex h-full flex-col gap-1.5 px-4 py-3.5 text-text')}
+      className={cardClassName(
+        lit ? 'lit' : 'outlined',
+        cn('flex h-full flex-col gap-1.5 px-4 py-3.5 text-text', lit && litBorder),
+      )}
     >
       <span className="flex items-baseline justify-between gap-3">
         <span className="font-semibold">{area.label}</span>
@@ -122,9 +134,9 @@ export function HealthAreas({
         ))}
       </ol>
       <ul className="grid gap-3 max-md:hidden md:grid-cols-3 xl:grid-cols-5">
-        {others.map((area) => (
+        {others.map((area, index) => (
           <li key={area.id}>
-            <OtherCard area={area} />
+            <OtherCard area={area} lit={index === 0} />
           </li>
         ))}
       </ul>

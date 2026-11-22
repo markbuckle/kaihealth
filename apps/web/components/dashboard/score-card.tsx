@@ -23,6 +23,7 @@ export function ScoreCard({
   return (
     <Card
       as="article"
+      variant="lit"
       aria-labelledby="score-title"
       className="grid grid-cols-[auto_1fr] items-center gap-x-4.5 gap-y-1 p-5 md:grid-rows-[auto_auto_1fr] md:gap-x-5 md:gap-y-4 md:p-6"
     >

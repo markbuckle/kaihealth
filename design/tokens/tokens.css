@@ -196,6 +196,29 @@
 
 :root {
   --border-card: var(--border-hairline);
+
+  /*
+    The lift under a card, used as shadow-(--shadow-card). It is not in @theme, because Tailwind
+    would copy its value into the class and the dashboard's override would never apply.
+    The landing page has none; the dashboard sets its own.
+  */
+  --shadow-card: var(--shadow-none);
+  --shadow-card-lit: var(--shadow-none);
+
+  /*
+    The soft light on the dashboard's canvas, laid over the canvas colour (bg-(image:--canvas-glow)).
+    The light theme has none: lighting the canvas takes away the contrast that makes the white
+    cards stand out. The dark theme sets its own below.
+  */
+  --canvas-glow: none;
+
+  /*
+    The colours of the highlights on lit cards (see [data-style="app"] below). In light the edge
+    darkens to a warm grey where the light would hit it, so it stays close to the page colours and
+    is only just noticeable. Only the dark theme has the soft light inside the card.
+  */
+  --lit-ink: var(--color-neutral-400);
+  --card-glow-ink: transparent;
 }
 
 /* 48rem and 64rem match the Tailwind md and lg breakpoints; lg is where the desktop layout starts */
@@ -233,6 +256,38 @@
   --color-status-neutral: var(--color-neutral-400);
   --color-status-warn: var(--color-amber-400);
   --color-status-flag: var(--color-red-400);
+
+  /* the highlights on lit cards are light catching the edge */
+  --lit-ink: var(--color-neutral-0);
+  --card-glow-ink: color-mix(in srgb, var(--color-neutral-0) 8%, transparent);
+
+  /* greys only: a pale beam from the top right, a faint horizontal sheen, and a lifted grey on the left */
+  --canvas-glow:
+    radial-gradient(
+      ellipse 44rem 30rem at 92% -6%,
+      color-mix(in srgb, var(--color-neutral-300) 10%, transparent),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 30rem 22rem at 78% 2%,
+      color-mix(in srgb, var(--color-neutral-0) 4%, transparent),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 60rem 7rem at 25% 24rem,
+      color-mix(in srgb, var(--color-neutral-0) 2%, transparent),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 32rem 26rem at 0% 58rem,
+      color-mix(in srgb, var(--color-neutral-600) 18%, transparent),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 60rem 22rem at 50% 100%,
+      color-mix(in srgb, var(--color-neutral-400) 18%, transparent),
+      transparent
+    );
 }
 
 /*
@@ -240,11 +295,88 @@
   data-theme. The landing page's dark bands keep the roles above, while the dashboard
   wireframe uses a raised surface, quieter borders and teal buttons.
 */
+[data-style="app"] {
+  /* two faint layers: a tight edge and a wide soft one */
+  --shadow-card:
+    0 1px 2px color-mix(in srgb, var(--color-neutral-900) 5%, transparent),
+    0 6px 20px color-mix(in srgb, var(--color-neutral-900) 4%, transparent);
+  /* lit cards sit a little higher: a crisper contact edge and a longer soft fall-off */
+  --shadow-card-lit:
+    0 1px 2px color-mix(in srgb, var(--color-neutral-900) 6%, transparent),
+    0 4px 8px color-mix(in srgb, var(--color-neutral-900) 4%, transparent),
+    0 14px 32px color-mix(in srgb, var(--color-neutral-900) 6%, transparent);
+
+  /*
+    Highlights painted over the border of a lit card (Card variant="lit"), in --lit-ink. They are
+    set here on the dashboard root, after the theme has picked the ink, so one shape serves both
+    themes. A card chooses one with [--border-lit:var(--border-lit-left)].
+  */
+  /* a spot on the top edge of the border that fades out along the sides */
+  --border-lit: radial-gradient(
+    ellipse 50% 60% at 50% 0%,
+    color-mix(in srgb, var(--lit-ink) 50%, transparent),
+    transparent
+  );
+
+  /* down the left border, curling a little round the top left corner */
+  --border-lit-left: radial-gradient(
+    ellipse 50% 60% at 0% 12%,
+    color-mix(in srgb, var(--lit-ink) 60%, transparent),
+    transparent
+  );
+
+  /* along the top border, leaning to the left */
+  --border-lit-top-left: radial-gradient(
+    ellipse 30% 90% at 14% 0%,
+    color-mix(in srgb, var(--lit-ink) 65%, transparent),
+    transparent
+  );
+
+  /* along the bottom border, one per action plan card so they are not all alike */
+  --border-lit-bottom-left: radial-gradient(
+    ellipse 36% 75% at 18% 100%,
+    color-mix(in srgb, var(--lit-ink) 60%, transparent),
+    transparent
+  );
+  --border-lit-bottom-lean-right: radial-gradient(
+    ellipse 30% 75% at 67% 100%,
+    color-mix(in srgb, var(--lit-ink) 70%, transparent),
+    transparent
+  );
+  --border-lit-bottom-lean-left: radial-gradient(
+    ellipse 30% 75% at 33% 100%,
+    color-mix(in srgb, var(--lit-ink) 70%, transparent),
+    transparent
+  );
+
+  /*
+    For a wide card: a strong patch along the top border from 10% to 40% of the width, clear of
+    the left corner, and a glow hugging the top right corner.
+  */
+  --border-lit-split:
+    radial-gradient(
+      ellipse 16% 60% at 25% 0%,
+      color-mix(in srgb, var(--lit-ink) 75%, transparent),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 22% 80% at 95% 0%,
+      color-mix(in srgb, var(--lit-ink) 75%, transparent),
+      transparent
+    );
+
+  /* a soft light inside a card under the left patch of --border-lit-split, in --card-glow-ink */
+  --card-glow: radial-gradient(ellipse 20% 90% at 25% 0%, var(--card-glow-ink), transparent);
+}
+
 [data-style="app"][data-theme="dark"] {
   --color-surface: var(--color-neutral-750);
   --color-border: var(--color-neutral-700);
   --color-button: var(--color-teal-500);
   --color-accent: var(--color-teal-500);
+  /* a shadow does not show on dark, where the raised card colour does the job */
+  --shadow-card: var(--shadow-none);
+  --shadow-card-lit: var(--shadow-none);
 }
 
 /*
@@ -269,4 +401,7 @@
   --color-status-neutral: var(--color-neutral-450);
   --color-status-warn: var(--color-amber-500);
   --color-status-flag: var(--color-red-500);
+
+  --lit-ink: var(--color-neutral-400);
+  --card-glow-ink: transparent;
 }

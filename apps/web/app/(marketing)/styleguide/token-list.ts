@@ -169,7 +169,7 @@ export const tokenGroups: TokenGroup[] = [
     names: ['hairline', 'strong', 'dashed'],
   },
   { title: 'Border roles', tier: 'Role', kind: 'border', names: ['card'] },
-  { title: 'Shadows', tier: 'Named value', kind: 'shadow', names: ['none'] },
+  { title: 'Shadows', tier: 'Named value', kind: 'shadow', names: ['none', 'card'] },
   { title: 'Blurs', tier: 'Named value', kind: 'blur', names: ['blob', 'blob-compact'] },
   { title: 'Durations', tier: 'Named value', kind: 'duration', names: ['fast', 'base'] },
   { title: 'Easings', tier: 'Named value', kind: 'ease', names: ['standard'] },
