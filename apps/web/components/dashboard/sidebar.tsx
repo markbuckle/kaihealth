@@ -35,6 +35,7 @@ function NavItem({ page, level }: { page: DashboardPage; level: Level }) {
       current={current}
       className={cn(
         'flex flex-1 items-center gap-2.5 rounded-inset',
+        level === 'top' && 'kai-icon-trigger',
         itemStyles[level],
         tone(page, level, current),
       )}
@@ -60,12 +61,12 @@ function NavGroup({ entry }: { entry: Extract<SidebarEntry, { type: 'group' }> }
           aria-controls={listId}
           aria-label={dashboardChrome.groupToggle(entry.page.label)}
           onClick={() => setOpen((value) => !value)}
-          className="size-8!"
+          className="kai-spin-trigger size-8!"
         >
           <Icon
             name="chevron-down"
             className={cn(
-              'size-3.5 transition-transform duration-(--duration-fast) motion-reduce:transition-none',
+              'kai-spin size-3.5 transition-transform duration-(--duration-fast) motion-reduce:transition-none',
               open && 'rotate-180',
             )}
           />
