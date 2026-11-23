@@ -9,7 +9,7 @@ import { useDashboardRoot } from './dashboard-root';
 // paint, before React knows the theme.
 const variants = {
   // a round icon button for the top bar
-  icon: { button: iconButtonClassName('plain', 'size-9!'), icon: '' },
+  icon: { button: iconButtonClassName('bare', 'size-9! text-text-muted!'), icon: '' },
   // a full-width row with its label, for the mobile More menu; a filled circle marks dark as on
   row: {
     button: 'flex min-h-14 w-full cursor-pointer items-center justify-between text-16',

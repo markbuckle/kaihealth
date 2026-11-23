@@ -55,6 +55,7 @@ function NavGroup({ entry }: { entry: Extract<SidebarEntry, { type: 'group' }> }
       <div className="flex items-center">
         <NavItem page={entry.page} level="top" />
         <IconButton
+          variant="bare"
           aria-expanded={open}
           aria-controls={listId}
           aria-label={dashboardChrome.groupToggle(entry.page.label)}

@@ -1,12 +1,14 @@
 import type { ComponentProps } from 'react';
 import { cn } from '../../lib/cn';
 
-export const iconButtonVariants = ['plain', 'outline'] as const;
+export const iconButtonVariants = ['plain', 'outline', 'bare'] as const;
 export type IconButtonVariant = (typeof iconButtonVariants)[number];
 
 const variants: Record<IconButtonVariant, string> = {
   plain: 'hover:bg-text/8',
   outline: 'border-hairline',
+  // no hover circle, for icons that sit straight in a row of text
+  bare: '',
 };
 
 // exported so Radix triggers and not-ready links can wear the same look

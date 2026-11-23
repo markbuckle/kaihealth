@@ -28,7 +28,7 @@ export function MobileHeader({ member }: { member: Member }) {
             dashboardChrome.notifications(member.unreadNotifications),
           )}
           title={dashboardChrome.soon}
-          className={iconButtonClassName('plain', 'relative')}
+          className={iconButtonClassName('bare', 'relative')}
         >
           <Icon name="bell" />
           <span

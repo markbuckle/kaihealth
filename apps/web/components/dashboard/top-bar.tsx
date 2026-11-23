@@ -23,7 +23,7 @@ export function TopBar({ member }: { member: Member }) {
             dashboardChrome.notifications(member.unreadNotifications),
           )}
           title={dashboardChrome.soon}
-          className={iconButtonClassName('plain', 'relative size-9!')}
+          className={iconButtonClassName('bare', 'relative size-9!')}
         >
           <Icon name="bell" />
           <span
