@@ -23,9 +23,9 @@ export function TopBar({ member }: { member: Member }) {
             dashboardChrome.notifications(member.unreadNotifications),
           )}
           title={dashboardChrome.soon}
-          className={iconButtonClassName('plain', 'relative size-9!')}
+          className={iconButtonClassName('bare', 'kai-motion-trigger relative size-9!')}
         >
-          <Icon name="bell" />
+          <Icon name="bell" className="kai-bell" />
           <span
             aria-hidden="true"
             className="absolute top-1.25 right-1.5 size-2 rounded-round bg-accent"

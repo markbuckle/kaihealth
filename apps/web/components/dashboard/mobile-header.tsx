@@ -28,9 +28,9 @@ export function MobileHeader({ member }: { member: Member }) {
             dashboardChrome.notifications(member.unreadNotifications),
           )}
           title={dashboardChrome.soon}
-          className={iconButtonClassName('plain', 'relative')}
+          className={iconButtonClassName('bare', 'kai-motion-trigger relative')}
         >
-          <Icon name="bell" />
+          <Icon name="bell" className="kai-bell" />
           <span
             aria-hidden="true"
             className="absolute top-2.5 right-2.75 size-1.75 rounded-round bg-accent"

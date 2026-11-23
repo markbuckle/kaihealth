@@ -9,10 +9,14 @@ import { useDashboardRoot } from './dashboard-root';
 // paint, before React knows the theme.
 const variants = {
   // a round icon button for the top bar
-  icon: { button: iconButtonClassName('plain', 'size-9!'), icon: '' },
+  icon: {
+    button: iconButtonClassName('bare', 'kai-motion-trigger size-9! text-text-muted!'),
+    icon: '',
+  },
   // a full-width row with its label, for the mobile More menu; a filled circle marks dark as on
   row: {
-    button: 'flex min-h-14 w-full cursor-pointer items-center justify-between text-16',
+    button:
+      'kai-motion-trigger flex min-h-14 w-full cursor-pointer items-center justify-between text-16',
     icon: iconButtonClassName('plain', 'in-data-[theme=dark]:bg-surface'),
   },
 } as const;
@@ -25,8 +29,8 @@ export function ThemeToggle({ variant = 'icon' }: { variant?: keyof typeof varia
   const styles = variants[variant];
   const icon = (
     <>
-      <Icon name="moon" className="in-data-[theme=dark]:hidden" />
-      <Icon name="sun" className="hidden in-data-[theme=dark]:block" />
+      <Icon name="moon" className="kai-moon in-data-[theme=dark]:hidden" />
+      <Icon name="sun" className="kai-sun hidden in-data-[theme=dark]:block" />
     </>
   );
   return (

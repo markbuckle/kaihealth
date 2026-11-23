@@ -25,11 +25,12 @@ export function DemoBanner() {
             {dashboardChrome.banner}
           </p>
           <IconButton
+            variant="bare"
             aria-label={dashboardChrome.dismissBanner}
             onClick={() => setOpen(false)}
-            className="size-8!"
+            className="kai-motion-trigger size-8!"
           >
-            <Icon name="close" className="size-4" />
+            <Icon name="close" className="kai-close size-4" />
           </IconButton>
         </div>
       </div>

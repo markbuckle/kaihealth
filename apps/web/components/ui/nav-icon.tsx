@@ -2,10 +2,41 @@ import { cn } from '../../lib/cn';
 
 // The sidebar icons, from design/icons/kai-icons.zip (the currentColor set). Each is a line
 // drawing with a faint tint of the same colour behind it. Names match the page or area id.
+// A group is one tinted-and-lined part. Icons that move on hover are split into groups, and a group with a motion
+// gets a class that the keyframes in globals.css pick up when its sidebar row is hovered or focused.
+type Group = {
+  tint?: string;
+  line?: string;
+  motion?:
+    | 'tile'
+    | 'beat'
+    | 'echo'
+    | 'trace'
+    | 'pop'
+    | 'arrive'
+    | 'peek'
+    | 'lines'
+    | 'shuffle'
+    | 'tick'
+    | 'strap';
+};
+type Icon = { tint: string; line: string } | { groups: Group[] };
+
 const paths = {
   areas: {
-    tint: 'm12 12 .54-5.17a5.2 5.2 0 0 1 4.63 4.63z',
-    line: 'M12.89 3.55a8.5 8.5 0 0 1 7.56 7.56m0 1.78a8.5 8.5 0 0 1-7.56 7.56m-1.78 0a8.5 8.5 0 0 1-7.56-7.56m0-1.78a8.5 8.5 0 0 1 7.56-7.56M12 12l.54-5.17a5.2 5.2 0 0 1 4.63 4.63z',
+    // a heart from Lucide (ISC) and a brain from Iconoir (MIT), two large organs so they stay clear at small sizes;
+    // the heart beats, then the brain, on hover
+    groups: [
+      {
+        motion: 'beat',
+        tint: 'M11.4 7.5c0.89 -0.88 1.8 -1.93 1.8 -3.3A3.3 3.3 0 0 0 9.9 0.9c-1.06 0 -1.8 0.3 -2.7 1.2 -0.9 -0.9 -1.64 -1.2 -2.7 -1.2A3.3 3.3 0 0 0 1.2 4.2c0 1.38 0.9 2.43 1.8 3.3l4.2 4.2Z',
+        line: 'M11.4 7.5c0.89 -0.88 1.8 -1.93 1.8 -3.3A3.3 3.3 0 0 0 9.9 0.9c-1.06 0 -1.8 0.3 -2.7 1.2 -0.9 -0.9 -1.64 -1.2 -2.7 -1.2A3.3 3.3 0 0 0 1.2 4.2c0 1.38 0.9 2.43 1.8 3.3l4.2 4.2Z',
+      },
+      {
+        motion: 'echo',
+        line: 'M13.6 18.04C12.54 18.04 11.68 18.9 11.68 19.96C11.68 21.02 12.54 21.88 13.6 21.88C13.82 21.88 14.04 21.84 14.24 21.77M11.85 19.07C10.99 18.65 10.4 17.78 10.4 16.76C10.4 15.98 10.74 15.29 11.29 14.82M11.31 14.77C11.14 14.51 11.04 14.21 11.04 13.88C11.04 13 11.76 12.28 12.64 12.28C13 12.28 13.33 12.4 13.6 12.6M13.75 12.64C13.65 12.43 13.6 12.2 13.6 11.96C13.6 11.08 14.32 10.36 15.2 10.36C16.08 10.36 16.8 11.08 16.8 11.96V21.88M14.24 21.88C14.24 22.59 14.81 23.16 15.52 23.16C16.23 23.16 16.8 22.59 16.8 21.88M16.8 13.56C16.8 14.62 17.66 15.48 18.72 15.48M20 18.04C21.06 18.04 21.92 18.9 21.92 19.96C21.92 21.02 21.06 21.88 20 21.88C19.78 21.88 19.56 21.84 19.36 21.77M21.75 19.07C22.61 18.65 23.2 17.78 23.2 16.76C23.2 15.98 22.86 15.29 22.31 14.82M22.29 14.77C22.46 14.51 22.56 14.21 22.56 13.88C22.56 13 21.84 12.28 20.96 12.28C20.6 12.28 20.27 12.4 20 12.6M16.8 11.96C16.8 11.08 17.52 10.36 18.4 10.36C19.28 10.36 20 11.08 20 11.96C20 12.2 19.95 12.43 19.85 12.64M19.36 21.88C19.36 22.59 18.79 23.16 18.08 23.16C17.37 23.16 16.8 22.59 16.8 21.88',
+      },
+    ],
   },
   blood: {
     tint: 'M4.58 14.8h9.84a4.92 4.92 0 0 1-9.84 0M17.6 4.45c1.57 1.94 2.7 3.47 2.7 4.95a2.7 2.7 0 0 1-5.4 0c0-1.48 1.12-3.02 2.7-4.95',
@@ -68,16 +99,40 @@ const paths = {
     line: 'M5.5 21V3.5m0 .5h11.4c.6 0 1 .7.6 1.2l-2.2 3.3 2.2 3.3c.4.5 0 1.2-.6 1.2H5.5',
   },
   plan: {
-    tint: 'M3.5 20.5V16h5v-4.5h5V7H18v13.5z',
-    line: 'M3.5 20.5V16h5v-4.5h5V7H18m-.5 0V3l3 1.5-3 1.5m-14 14.5h17',
+    // route from Lucide (ISC), with the start and end points tinted; the route redraws and the circles pop on hover
+    groups: [
+      {
+        motion: 'pop',
+        tint: 'M3 19a3 3 0 1 0 6 0 3 3 0 1 0-6 0',
+        line: 'M3 19a3 3 0 1 0 6 0 3 3 0 1 0-6 0',
+      },
+      { motion: 'trace', line: 'M9 19h8.5a3.5 3.5 0 0 0 0-7h-11a3.5 3.5 0 0 1 0-7H15' },
+      {
+        motion: 'arrive',
+        tint: 'M15 5a3 3 0 1 0 6 0 3 3 0 1 0-6 0',
+        line: 'M15 5a3 3 0 1 0 6 0 3 3 0 1 0-6 0',
+      },
+    ],
   },
   priorities: {
     tint: 'M5.5 4h13a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2 2 2 0 0 1 2-2',
     line: 'M5.5 4h13a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-13a2 2 0 0 1-2-2 2 2 0 0 1 2-2m0 6h8a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-8a2 2 0 0 1-2-2 2 2 0 0 1 2-2m0 6h3a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-3a2 2 0 0 1-2-2 2 2 0 0 1 2-2',
   },
   records: {
-    tint: 'M6.5 6.5h7a2 2 0 0 1 2 2V19a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V8.5a2 2 0 0 1 2-2',
-    line: 'M6.5 6.5h7a2 2 0 0 1 2 2V19a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V8.5a2 2 0 0 1 2-2M8 3.8A1.8 1.8 0 0 1 9.6 3h7.6a2.3 2.3 0 0 1 2.3 2.3v10.2a1.8 1.8 0 0 1-1.6 1.8M7.8 11.5h4.5M7.8 15h4.5',
+    // two pages: on hover the front one slides aside and the back one, with its lines, peeks out
+    groups: [
+      {
+        motion: 'peek',
+        line: 'M8 3.8A1.8 1.8 0 0 1 9.6 3h7.6a2.3 2.3 0 0 1 2.3 2.3v10.2a1.8 1.8 0 0 1-1.6 1.8',
+      },
+      // hidden at rest, they show only while the pages are apart
+      { motion: 'lines', line: 'M14.8 8h3.2M14.8 11.5h3.2' },
+      {
+        motion: 'shuffle',
+        tint: 'M6.5 6.5h7a2 2 0 0 1 2 2V19a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V8.5a2 2 0 0 1 2-2',
+        line: 'M6.5 6.5h7a2 2 0 0 1 2 2V19a2 2 0 0 1-2 2h-7a2 2 0 0 1-2-2V8.5a2 2 0 0 1 2-2M7.8 11.5h4.5M7.8 15h4.5',
+      },
+    ],
   },
   screening: {
     tint: 'M3.7 10.5a6.8 6.8 0 1 0 13.6 0 6.8 6.8 0 1 0-13.6 0',
@@ -88,37 +143,79 @@ const paths = {
     line: 'M3.5 11c2.2 3 5 4.5 8.5 4.5s6.3-1.5 8.5-4.5M6.2 14.2l-1.5 2.1m7.3-.8V18m5.8-3.8 1.5 2.1M15 3.5h3.5l-3.5 4h3.5',
   },
   summary: {
-    tint: 'M3 12a9 9 0 1 0 18 0 9 9 0 1 0-18 0',
-    line: 'M12 3a9 9 0 1 1-9 9m9-4.5V12l3 1.8',
+    // layout-dashboard from Lucide (ISC), with the two larger blocks tinted; the blocks shrink and return in turn on hover
+    groups: [
+      {
+        motion: 'tile',
+        tint: 'M4 3h5a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z',
+        line: 'M4 3h5a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z',
+      },
+      {
+        motion: 'tile',
+        line: 'M15 3h5a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z',
+      },
+      {
+        motion: 'tile',
+        tint: 'M15 12h5a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1z',
+        line: 'M15 12h5a1 1 0 0 1 1 1v7a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-7a1 1 0 0 1 1-1z',
+      },
+      {
+        motion: 'tile',
+        line: 'M4 16h5a1 1 0 0 1 1 1v3a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-3a1 1 0 0 1 1-1z',
+      },
+    ],
   },
   thyroid: {
     tint: 'M11.2 8.6C10 5.6 5 5.4 5 10.2c0 4.4 3 7.6 6.2 6.2zm1.6 0c1.2-3 6.2-3.2 6.2 1.6 0 4.4-3 7.6-6.2 6.2z',
     line: 'M11.2 8.6C10 5.6 5 5.4 5 10.2c0 4.4 3 7.6 6.2 6.2zm1.6 0c1.2-3 6.2-3.2 6.2 1.6 0 4.4-3 7.6-6.2 6.2zm-1.6 4h1.6M12 3.5v3',
   },
   wearables: {
-    tint: 'M9.5 6h5A3.5 3.5 0 0 1 18 9.5v5a3.5 3.5 0 0 1-3.5 3.5h-5A3.5 3.5 0 0 1 6 14.5v-5A3.5 3.5 0 0 1 9.5 6',
-    line: 'M9.5 6h5A3.5 3.5 0 0 1 18 9.5v5a3.5 3.5 0 0 1-3.5 3.5h-5A3.5 3.5 0 0 1 6 14.5v-5A3.5 3.5 0 0 1 9.5 6M9 6l.6-3h4.8l.6 3M9 18l.6 3h4.8l.6-3m-6.2-6h1.7l1-2 1.6 4 1-2h1.1',
+    // watch from Lucide (ISC), flipped horizontally and turned 90 degrees so it lies on its side, with the face tinted;
+    // the hand turns one way and the strap the other on hover
+    groups: [
+      {
+        tint: 'M12 6A6 6 0 1 0 12 18A6 6 0 1 0 12 6',
+        line: 'M12 6A6 6 0 1 0 12 18A6 6 0 1 0 12 6',
+      },
+      { motion: 'tick', line: 'M14 12L12 12L11 11' },
+      {
+        motion: 'strap',
+        line: 'M16.34 7.87L20.39 8.68A2 2 0 0 1 22 10.68L22 13.36A2 2 0 0 1 20.39 15.36L16.34 16.14M7.64 16.12L3.64 15.32A2 2 0 0 1 2.03 13.32L2.03 10.6A2 2 0 0 1 3.64 8.6L7.69 7.79',
+      },
+    ],
   },
-} as const;
+} as const satisfies Record<string, Icon>;
 
 export type NavIconName = keyof typeof paths;
 
 export function NavIcon({ name, className }: { name: NavIconName; className?: string }) {
-  const { tint, line } = paths[name];
+  const icon: Icon = paths[name];
+  const groups: Group[] = 'groups' in icon ? icon.groups : [icon];
   return (
     <svg
       viewBox="0 0 24 24"
       aria-hidden="true"
-      className={cn('size-5 shrink-0 fill-none', className)}
+      // overflow-visible lets a part that grows on hover draw past the edge instead of being cut off
+      className={cn('size-5 shrink-0 overflow-visible fill-none', className)}
     >
-      <path d={tint} fill="currentColor" fillOpacity={0.16} />
-      <path
-        d={line}
-        stroke="currentColor"
-        strokeWidth={1.5}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      {groups.map((group) => (
+        <g
+          key={group.line ?? group.tint}
+          className={group.motion ? `kai-icon-${group.motion}` : undefined}
+        >
+          {group.tint ? <path d={group.tint} fill="currentColor" fillOpacity={0.16} /> : null}
+          {group.line ? (
+            <path
+              d={group.line}
+              stroke="currentColor"
+              strokeWidth={1.5}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              pathLength={group.motion === 'trace' ? 1 : undefined}
+            />
+          ) : null}
+        </g>
+      ))}
     </svg>
   );
 }

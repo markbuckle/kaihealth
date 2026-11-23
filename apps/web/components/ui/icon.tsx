@@ -26,10 +26,22 @@ export type IconName = (typeof iconNames)[number];
 // Line icons drawn on a 24 unit grid. They take their colour from the text colour.
 // The dashboard icons are copied from design/wireframe/dashboard.html; moon is new, and sun is
 // the wireframe's settings icon.
-const paths: Record<IconName, string> = {
+type Part = { d: string; className?: string };
+
+// Most icons are one path. An icon with parts draws each as its own path, so a part with a class
+// can move on its own (the sun's rays).
+const paths: Record<IconName, string | { parts: Part[] }> = {
   bell: 'M6 16v-5a6 6 0 0 1 12 0v5l1.5 2h-15zM10 20a2 2 0 0 0 4 0',
   sparkle: 'M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z',
-  sun: 'M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0zM12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1',
+  sun: {
+    parts: [
+      { d: 'M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0z' },
+      {
+        d: 'M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1',
+        className: 'kai-rays',
+      },
+    ],
+  },
   'chevron-down': 'M6 9l6 6 6-6',
   'chevron-right': 'M9 6l6 6-6 6',
   home: 'M4 11l8-7 8 7v9h-5v-6H9v6H4z',
@@ -50,6 +62,7 @@ const paths: Record<IconName, string> = {
 };
 
 export function Icon({ name, className }: { name: IconName; className?: string }) {
+  const path = paths[name];
   return (
     <svg
       viewBox="0 0 24 24"
@@ -59,7 +72,11 @@ export function Icon({ name, className }: { name: IconName; className?: string }
       strokeLinecap="round"
       strokeLinejoin="round"
     >
-      <path d={paths[name]} />
+      {typeof path === 'string' ? (
+        <path d={path} />
+      ) : (
+        path.parts.map((part) => <path key={part.d} d={part.d} className={part.className} />)
+      )}
     </svg>
   );
 }
