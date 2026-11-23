@@ -48,18 +48,14 @@ function PriorityCard({
           <span className="text-12">{status}</span>
           <span className="text-12 text-text-muted">{copy.drivenBy(area.drivers.join(', '))}</span>
         </span>
-        {page.ready ? (
-          <Icon name="chevron-right" className="size-4" />
-        ) : (
-          <SoonLabel to={page} className="text-text-muted" />
-        )}
+        {page.ready ? <Icon name="chevron-right" className="size-4" /> : <SoonLabel to={page} />}
       </span>
       <span className="flex h-full flex-col gap-2.5 p-5 max-md:hidden">
         <span className="flex items-baseline justify-between gap-3">
           <Eyebrow as="span" variant="card">
             {copy.rank(rank)}
           </Eyebrow>
-          <SoonLabel to={page} className="text-text-muted" />
+          <SoonLabel to={page} />
         </span>
         <span className="font-semibold text-18">{area.label}</span>
         <span className="flex items-baseline gap-1.5">
@@ -94,7 +90,7 @@ function OtherCard({ area, lit }: { area: AreaSummary; lit: boolean }) {
       </span>
       <span className="flex items-center justify-between gap-2 text-12">
         <StatusPill variant="dot" status={area.status} />
-        <SoonLabel to={page} className="text-text-muted" />
+        <SoonLabel to={page} />
       </span>
       <span className="text-12 text-text-muted">{copy.drivenBy(area.drivers.join(', '))}</span>
     </PageLink>

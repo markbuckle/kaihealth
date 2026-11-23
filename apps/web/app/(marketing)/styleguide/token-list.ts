@@ -100,6 +100,7 @@ export const tokenGroups: TokenGroup[] = [
     tier: 'Named value',
     kind: 'text',
     names: [
+      '9',
       '10',
       '11',
       '12',

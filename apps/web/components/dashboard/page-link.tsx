@@ -59,11 +59,19 @@ export function PageLink({
   );
 }
 
-// "Soon" for a page not built yet, "Coming later" for one the product does not offer yet
+// "Soon" for a page not built yet, "Coming later" for one the product does not offer yet.
+// It is small and faded so it reads as a note. Capitals are centred on their own height, which
+// looks high beside lowercase text, so it sits a little lower.
+// one-off: the 0.75px shift is an optical correction for this one size of mono capitals
 export function SoonLabel({ to, className }: { to: DashboardPage; className?: string }) {
   if (to.ready) return null;
   return (
-    <span className={cn('font-label text-10 uppercase leading-flat tracking-tag', className)}>
+    <span
+      className={cn(
+        'translate-y-[0.75px] font-label text-9 uppercase leading-flat tracking-tag opacity-70',
+        className,
+      )}
+    >
       {to.later ? dashboardChrome.later : dashboardChrome.soon}
     </span>
   );
