@@ -1,8 +1,8 @@
 import {
   Bricolage_Grotesque,
+  DM_Sans,
   Geist,
   Geist_Mono,
-  Hanken_Grotesk,
   Instrument_Serif,
 } from 'next/font/google';
 
@@ -40,13 +40,13 @@ const bricolage = Bricolage_Grotesque({
   display: 'swap',
 });
 
-const hanken = Hanken_Grotesk({
+const dmSans = DM_Sans({
   subsets: ['latin'],
-  variable: '--font-hanken',
+  variable: '--font-dm-sans',
   display: 'swap',
 });
 
 // applied once on <html> so every font token resolves anywhere in the page
-export const fontVariables = [geist, geistMono, instrumentSerif, bricolage, hanken]
+export const fontVariables = [geist, geistMono, instrumentSerif, bricolage, dmSans]
   .map((font) => font.variable)
   .join(' ');
