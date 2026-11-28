@@ -3,11 +3,12 @@ import { footer } from '../content/site';
 import { Eyebrow } from './ui/eyebrow';
 import { Logo } from './ui/logo';
 
+// z-20 keeps the footer in front of the closing call to action's ribbon, which tucks in behind it
 export function SiteFooter() {
   return (
     <footer
       data-theme="dark"
-      className="border-border border-t bg-surface px-gutter pt-18 pb-10 text-text"
+      className="relative z-20 border-border border-t bg-surface px-gutter pt-18 pb-10 text-text"
     >
       <div className="mx-auto flex max-w-content flex-col gap-14">
         <div className="flex flex-col gap-12 lg:flex-row lg:justify-between lg:gap-16">

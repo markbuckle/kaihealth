@@ -30,6 +30,7 @@ apps/web/
   content/                   copy, FAQ, nav config and synthetic data as typed data
   content/dashboard-nav.ts   every dashboard page, with its ready flag
   content/demo/              synthetic demo member, results and plan
+  public/spline/             Spline scene exports (.splinecode), served from our own origin
   lib/config.ts              brand name, routes, feature flags
   lib/health/                domain types and pure functions: statuses, scores, formatting
   lib/member-data.ts         the one place dashboard pages read member data from
@@ -78,6 +79,7 @@ packages/ and Turborepo come only when a second app needs shared code. Ask befor
 - Class names are joined with a small local helper. No variant library.
 - Radix states are styled with data attributes (`data-[state=open]:`). Wrappers are client components. Sections stay server components.
 - Decorative SVG artwork is its own component in `ui/`, with fills pointing at palette variables.
+- 3D artwork is a Spline scene exported to `public/spline/` and shown through `ui/ribbon.tsx`. Nothing outside `components/ui/` imports from `@splinetool`, and scenes never load from Spline's servers.
 
 ## Stack and dependencies
 
