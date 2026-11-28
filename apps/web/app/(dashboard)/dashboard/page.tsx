@@ -4,7 +4,6 @@ import { HealthAreas } from '../../../components/dashboard/health-areas';
 import { Insights } from '../../../components/dashboard/insights';
 import { ScoreCard } from '../../../components/dashboard/score-card';
 import { TestingCard } from '../../../components/dashboard/testing-card';
-import { WeeklyFocus } from '../../../components/dashboard/weekly-focus';
 import { WelcomeCard } from '../../../components/dashboard/welcome-card';
 import { dashboardPages } from '../../../content/dashboard-nav';
 import { formatMonth } from '../../../lib/health/format';
@@ -38,9 +37,8 @@ export default async function DashboardHomePage() {
         />
       </div>
       <HealthAreas areas={summary.areas} since={since} />
-      <WeeklyFocus focus={summary.focus} />
       <Insights insights={summary.insights} />
-      <ActionPlan plan={summary.plan} />
+      <ActionPlan plan={summary.plan} focus={summary.focus} />
     </div>
   );
 }

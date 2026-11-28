@@ -1,8 +1,10 @@
+import Link from 'next/link';
 import { home } from '../../content/dashboard';
 import { areaPage, dashboardPages } from '../../content/dashboard-nav';
 import { cn } from '../../lib/cn';
+import { routes } from '../../lib/config';
 import type { AreaSummary } from '../../lib/member-data';
-import { cardClassName } from '../ui/card';
+import { Card, cardClassName } from '../ui/card';
 import { Eyebrow } from '../ui/eyebrow';
 import { Icon } from '../ui/icon';
 import { StatusPill } from '../ui/status-pill';
@@ -97,6 +99,25 @@ function OtherCard({ area, lit }: { area: AreaSummary; lit: boolean }) {
   );
 }
 
+// A category with no testing behind it yet: no score, just a way to hear more.
+function ExtraCard({ extra }: { extra: (typeof copy.extras)[number] }) {
+  return (
+    <Card className="flex items-center gap-4 p-4 md:p-5">
+      <span className="grid size-12 shrink-0 place-items-center rounded-full border border-border bg-surface">
+        <Icon name={extra.icon} className="size-5" />
+      </span>
+      <span className="flex min-w-0 flex-1 flex-col gap-1">
+        <span className="font-semibold text-16">{extra.label}</span>
+        <span className="text-12 text-text-muted">{copy.notTested}</span>
+        <Link href={routes.comingSoon} className={cn(textLinkClassName, 'w-fit text-13')}>
+          {copy.learnMore}
+          <span className="sr-only"> {extra.label}</span>
+        </Link>
+      </span>
+    </Card>
+  );
+}
+
 export function HealthAreas({
   areas,
   since,
@@ -133,6 +154,13 @@ export function HealthAreas({
         {others.map((area, index) => (
           <li key={area.id}>
             <OtherCard area={area} lit={index === 0} />
+          </li>
+        ))}
+      </ul>
+      <ul aria-label={copy.extrasLabel} className="grid gap-3 md:grid-cols-3 md:gap-4">
+        {copy.extras.map((extra) => (
+          <li key={extra.id}>
+            <ExtraCard extra={extra} />
           </li>
         ))}
       </ul>

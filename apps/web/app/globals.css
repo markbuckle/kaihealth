@@ -35,8 +35,9 @@
   border: var(--border-dashed) var(--color-border);
 }
 
+/* a card's outline; --color-card-edge lets a theme set it apart from the lines inside the card */
 @utility border-card {
-  border: var(--border-card) var(--color-border);
+  border: var(--border-card) var(--color-card-edge, var(--color-border));
 }
 
 /*
@@ -46,7 +47,7 @@
 */
 @utility border-lit {
   border: var(--border-card) transparent;
-  background-color: var(--color-border);
+  background-color: var(--color-card-edge, var(--color-border));
   background-image: linear-gradient(var(--color-card), var(--color-card)), var(--border-lit, none);
   background-origin: border-box;
   /* one entry per layer: the fill, then up to two highlights. The last layer's clip also sets where the colour paints */

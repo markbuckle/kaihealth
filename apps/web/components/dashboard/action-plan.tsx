@@ -2,7 +2,7 @@ import { home } from '../../content/dashboard';
 import { dashboardPages, recommendationPage } from '../../content/dashboard-nav';
 import { cn } from '../../lib/cn';
 import { planCategoryLabel } from '../../lib/health/plan';
-import type { PlanItem } from '../../lib/member-data';
+import type { HomeSummary, PlanItem } from '../../lib/member-data';
 import { buttonClassName } from '../ui/button';
 import { Card } from '../ui/card';
 import { Chip } from '../ui/chip';
@@ -10,6 +10,7 @@ import { Eyebrow } from '../ui/eyebrow';
 import { Tabs } from '../ui/tabs';
 import { PageLink, SoonLabel, textLinkClassName } from './page-link';
 import { SectionHeading } from './section-heading';
+import { WeeklyFocus } from './weekly-focus';
 
 const copy = home.plan;
 const { plan: fullPlan, planPriorities } = dashboardPages;
@@ -79,8 +80,9 @@ function PlanCards({ items, emptyLabel }: { items: PlanItem[]; emptyLabel?: stri
   );
 }
 
-// The chips filter the plan: Priorities shows every recommendation by rank.
-export function ActionPlan({ plan }: { plan: PlanItem[] }) {
+// The chips filter the plan: Priorities shows every recommendation by rank. This week's focus
+// sits between the chips and the cards and stays put whichever chip is chosen.
+export function ActionPlan({ plan, focus }: { plan: PlanItem[]; focus: HomeSummary['focus'] }) {
   return (
     <section aria-labelledby="plan-title" className="flex flex-col gap-3 md:gap-4">
       <SectionHeading
@@ -100,6 +102,7 @@ export function ActionPlan({ plan }: { plan: PlanItem[] }) {
       <Tabs
         variant="filter"
         label={copy.filterLabel}
+        belowList={<WeeklyFocus focus={focus} />}
         items={[
           {
             value: 'priorities',

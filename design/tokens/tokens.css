@@ -25,11 +25,15 @@
   /* palette: named by hue and step, higher step is darker */
   --color-neutral-0: #fcfcfb;
   --color-neutral-100: #f3efec;
+  --color-sand-100: #f7f2ec;
+  --color-sand-200: #efe6db;
+  --color-sand-400: #9b8b7a;
   --color-neutral-300: #cfccc9;
   --color-neutral-400: #a9a6a3;
   --color-neutral-450: #9a9895;
   --color-neutral-500: #828282;
   --color-neutral-600: #5e5c5a;
+  --color-neutral-650: #4a4741;
   /* 700 and 750 are close on purpose: the dashboard wireframe uses one for dark borders, one for dark surfaces */
   --color-neutral-700: #3a3937;
   --color-neutral-750: #353534;
@@ -41,6 +45,11 @@
   --color-teal-600: #1593a9;
   --color-teal-700: #0c7489;
   --color-sky-300: #8ccbea;
+  /* trial: the light dashboard's accent, tried against the warm palette */
+  --color-trial-accent: #74503d;
+  /* trial: the dark dashboard's logo and button colour, and a deeper one for its chart */
+  --color-trial-button-dark: #d4a283;
+  --color-trial-accent-dark: #a5755a;
 
   --color-yellow-500: #f2b90f;
   --color-orange-500: #f0883a;
@@ -162,14 +171,24 @@
   --color-card: var(--color-neutral-0);
   /* the background behind the dashboard's cards, so they stand out from it */
   --color-canvas: var(--color-neutral-100);
+  /* the dashboard sidebar and headers; the page colour except where the dashboard overrides it below */
+  --color-chrome: var(--color-neutral-0);
   --color-surface: var(--color-neutral-100);
-  --color-text: var(--color-neutral-900);
+  --color-text: var(--color-neutral-650);
   --color-text-muted: var(--color-neutral-600);
   --color-border: var(--color-neutral-300);
   --color-button: var(--color-neutral-900);
   --color-button-text: var(--color-neutral-0);
   --color-link: var(--color-teal-700);
   --color-accent: var(--color-teal-600);
+  /*
+    Quiet text on the dashboard canvas, outside the cards: section leads and their links, and the
+    "Soon" notes beside those links. The muted text colour unless the dashboard sets its own.
+  */
+  --color-canvas-text: var(--color-text-muted);
+  --color-canvas-note: var(--color-text-muted);
+  /* the dashboard's demo banner, a band in the surface colour unless the dashboard sets its own */
+  --color-banner: var(--color-surface);
 
   /* optimal, in range, borderline and out of range */
   --color-status-good: var(--color-green-500);
@@ -208,18 +227,16 @@
   */
   --shadow-card: var(--shadow-none);
   --shadow-card-lit: var(--shadow-none);
-
   /*
     The soft light on the dashboard's canvas, laid over the canvas colour (bg-(image:--canvas-glow)).
-    The light theme has none: lighting the canvas takes away the contrast that makes the white
-    cards stand out. The dark theme sets its own below.
+    None by default; the dashboard's dark and light themes each set their own below.
   */
   --canvas-glow: none;
 
   /*
-    The colours of the highlights on lit cards (see [data-style="app"] below). In light the edge
-    darkens to a warm grey where the light would hit it, so it stays close to the page colours and
-    is only just noticeable. Only the dark theme has the soft light inside the card.
+    The colours of the highlights on lit cards (see [data-style="app"] below). Off the dashboard the
+    edge darkens to a warm grey where the light would hit it, close to the page colours. The
+    dashboard lights the edge in both themes, and only dark has the soft light inside the card.
   */
   --lit-ink: var(--color-neutral-400);
   --card-glow-ink: transparent;
@@ -247,6 +264,7 @@
   --color-page: var(--color-neutral-900);
   --color-card: var(--color-neutral-800);
   --color-canvas: var(--color-neutral-900);
+  --color-chrome: var(--color-neutral-900);
   --color-surface: var(--color-neutral-800);
   --color-text: var(--color-neutral-0);
   --color-text-muted: var(--color-neutral-400);
@@ -306,13 +324,13 @@
 
   /* two faint layers: a tight edge and a wide soft one */
   --shadow-card:
-    0 1px 2px color-mix(in srgb, var(--color-neutral-900) 5%, transparent),
-    0 6px 20px color-mix(in srgb, var(--color-neutral-900) 4%, transparent);
+    var(--card-halo), 0 2px 4px color-mix(in srgb, var(--color-neutral-900) 10%, transparent),
+    0 10px 28px color-mix(in srgb, var(--color-neutral-900) 12%, transparent);
   /* lit cards sit a little higher: a crisper contact edge and a longer soft fall-off */
   --shadow-card-lit:
-    0 1px 2px color-mix(in srgb, var(--color-neutral-900) 6%, transparent),
-    0 4px 8px color-mix(in srgb, var(--color-neutral-900) 4%, transparent),
-    0 14px 32px color-mix(in srgb, var(--color-neutral-900) 6%, transparent);
+    var(--card-halo), 0 2px 4px color-mix(in srgb, var(--color-neutral-900) 12%, transparent),
+    0 6px 12px color-mix(in srgb, var(--color-neutral-900) 10%, transparent),
+    0 18px 40px color-mix(in srgb, var(--color-neutral-900) 16%, transparent);
 
   /*
     Highlights painted over the border of a lit card (Card variant="lit"), in --lit-ink. They are
@@ -380,11 +398,67 @@
 [data-style="app"][data-theme="dark"] {
   --color-surface: var(--color-neutral-750);
   --color-border: var(--color-neutral-700);
-  --color-button: var(--color-teal-500);
-  --color-accent: var(--color-teal-500);
+  --color-button: var(--color-trial-button-dark);
+  --color-link: var(--color-trial-button-dark);
+  --color-accent: var(--color-trial-accent-dark);
   /* a shadow does not show on dark, where the raised card colour does the job */
   --shadow-card: var(--shadow-none);
   --shadow-card-lit: var(--shadow-none);
+}
+
+/* the dashboard's light cards, sidebar and headers are a warm sand on a darker brown grey canvas, set once here so dark mode keeps its own */
+[data-style="app"]:not([data-theme="dark"]) {
+  --color-canvas: var(--color-sand-400);
+  --color-card: var(--color-sand-200);
+  --color-chrome: var(--color-sand-200);
+  /* pale like the cards on the brown canvas, with the "Soon" notes in the darker text colour */
+  --color-canvas-text: var(--color-sand-200);
+  --color-canvas-note: var(--color-text);
+  /* the demo banner takes the canvas colour, with its text in the pale canvas text */
+  --color-banner: var(--color-sand-400);
+  --color-accent: var(--color-trial-accent);
+  --color-link: var(--color-trial-accent);
+  /*
+    As in dark, a border lighter than the card, lit to white where the light catches it. The
+    cards are nearly white, so a soft white glow outside the border carries the light onto the
+    darker canvas instead.
+  */
+  --color-card-edge: var(--color-sand-100);
+  /* the lines inside the sidebar and cards: a pale tint of the accent */
+  --color-border: color-mix(in srgb, var(--color-trial-accent) 35%, var(--color-sand-200));
+  --card-halo: 0 0 6px color-mix(in srgb, var(--color-neutral-0) 35%, transparent);
+  --lit-ink: var(--color-neutral-0);
+
+  /*
+    The dark canvas layout turned to shade: where dark brightens the canvas, light darkens it,
+    so the pale card edges stand out against it. Warm browns only.
+  */
+  --canvas-glow:
+    radial-gradient(
+      ellipse 44rem 30rem at 92% -6%,
+      color-mix(in srgb, var(--color-neutral-650) 40%, transparent),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 30rem 22rem at 78% 2%,
+      color-mix(in srgb, var(--color-neutral-800) 15%, transparent),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 60rem 7rem at 25% 24rem,
+      color-mix(in srgb, var(--color-neutral-650) 12%, transparent),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 32rem 26rem at 0% 58rem,
+      color-mix(in srgb, var(--color-neutral-650) 30%, transparent),
+      transparent
+    ),
+    radial-gradient(
+      ellipse 60rem 22rem at 50% 100%,
+      color-mix(in srgb, var(--color-neutral-650) 30%, transparent),
+      transparent
+    );
 }
 
 /*
@@ -396,8 +470,9 @@
   --color-page: var(--color-neutral-0);
   --color-card: var(--color-neutral-0);
   --color-canvas: var(--color-neutral-100);
+  --color-chrome: var(--color-neutral-0);
   --color-surface: var(--color-neutral-100);
-  --color-text: var(--color-neutral-900);
+  --color-text: var(--color-neutral-650);
   --color-text-muted: var(--color-neutral-600);
   --color-border: var(--color-neutral-300);
   --color-button: var(--color-neutral-900);

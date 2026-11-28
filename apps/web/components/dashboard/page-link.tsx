@@ -67,6 +67,8 @@ export function SoonLabel({ to, className }: { to: DashboardPage; className?: st
   if (to.ready) return null;
   return (
     <span
+      // lets a surrounding area recolour the note, as the section headings do
+      data-soon=""
       className={cn(
         'translate-y-[0.75px] font-label text-9 uppercase leading-flat tracking-tag opacity-70',
         className,

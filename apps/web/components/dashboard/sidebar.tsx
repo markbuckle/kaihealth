@@ -88,7 +88,7 @@ export function Sidebar() {
   return (
     <nav
       aria-label={dashboardChrome.mainNav}
-      className="w-sidebar shrink-0 border-border border-r bg-page px-4 pt-5 pb-8 max-lg:hidden"
+      className="w-sidebar shrink-0 border-border border-r bg-chrome px-4 pt-5 pb-8 max-lg:hidden"
     >
       <ul className="flex flex-col gap-0.5">
         {sidebarNav.map((entry, index) => {
