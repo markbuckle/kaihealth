@@ -14,7 +14,7 @@ const { notifications, askKai, account } = dashboardPages;
 // The desktop top bar, from lg up. The mobile header takes over below that.
 export function TopBar({ member }: { member: Member }) {
   return (
-    <header className="flex h-18 items-center justify-between gap-4 border-border border-b bg-page px-6 max-lg:hidden">
+    <header className="flex h-18 items-center justify-between gap-4 border-border border-b bg-chrome px-6 max-lg:hidden">
       <Logo variant="dashboard" href={routes.dashboard} />
       <div className="flex items-center gap-1.5">
         <PageLink

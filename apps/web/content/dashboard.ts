@@ -1,3 +1,4 @@
+import type { IconName } from '../components/ui/icon';
 import type { PlanCategoryId } from '../lib/health/plan';
 import { footer } from './site';
 
@@ -78,6 +79,15 @@ export const home = {
     outOf: '/100',
     driving: (drivers: string) => `What's driving this: ${drivers}`,
     drivenBy: (drivers: string) => `Driven by ${drivers}`,
+    // placeholder: no genetic, microbiome or emotional health testing exists yet, so these cards only point at coming-soon
+    extrasLabel: 'More categories',
+    extras: [
+      { id: 'genetics', label: 'Genetics', icon: 'dna' },
+      { id: 'microbiome', label: 'Microbiome', icon: 'microbe' },
+      { id: 'emotional', label: 'Emotional health', icon: 'smile' },
+    ] satisfies { id: string; label: string; icon: IconName }[],
+    notTested: 'Not tested yet',
+    learnMore: 'Learn more',
   },
   focus: {
     eyebrow: (category: string) => `This week's focus · ${category}`,

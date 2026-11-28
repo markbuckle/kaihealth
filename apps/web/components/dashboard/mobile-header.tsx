@@ -13,7 +13,7 @@ const { notifications, askKai, account } = dashboardPages;
 // The header below lg. Navigation moves to the tab bar at the bottom of the screen.
 export function MobileHeader({ member }: { member: Member }) {
   return (
-    <header className="flex h-15 items-center justify-between gap-2 border-border border-b bg-page pr-2 pl-5 lg:hidden">
+    <header className="flex h-15 items-center justify-between gap-2 border-border border-b bg-chrome pr-2 pl-5 lg:hidden">
       <Logo variant="dashboard" href={routes.dashboard} />
       <div className="flex items-center">
         <PageLink to={askKai} className={buttonClassName({ variant: 'outline', size: 'xs' })}>

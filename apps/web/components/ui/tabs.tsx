@@ -36,11 +36,20 @@ type TabsProps = {
   label: string;
   items: TabEntry[];
   defaultValue?: string;
+  // shown under the tab list whichever tab is active
+  belowList?: ReactNode;
   variant?: TabsVariant;
   className?: string;
 };
 
-export function Tabs({ label, items, defaultValue, variant = 'chips', className }: TabsProps) {
+export function Tabs({
+  label,
+  items,
+  defaultValue,
+  belowList,
+  variant = 'chips',
+  className,
+}: TabsProps) {
   const styles = variants[variant];
   return (
     <RadixTabs.Root
@@ -54,6 +63,7 @@ export function Tabs({ label, items, defaultValue, variant = 'chips', className 
           </RadixTabs.Trigger>
         ))}
       </RadixTabs.List>
+      {belowList}
       {items.map((item) => (
         <RadixTabs.Content key={item.value} value={item.value} className="w-full">
           {item.content}

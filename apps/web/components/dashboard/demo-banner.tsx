@@ -14,14 +14,14 @@ export function DemoBanner() {
     // the row collapses from its full height to zero, which slides the page up with it
     <div
       className={cn(
-        'grid bg-surface transition-[grid-template-rows] duration-(--duration-base) ease-standard motion-reduce:transition-none',
+        'grid bg-banner transition-[grid-template-rows] duration-(--duration-base) ease-standard motion-reduce:transition-none',
         open ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]',
       )}
     >
       {/* inert keeps a hidden banner out of the tab order and away from screen readers */}
       <div inert={!open} className="overflow-hidden">
         <div className="flex items-center gap-2 py-1.5 pr-2 pl-4 lg:py-2">
-          <p className="flex-1 text-center font-label text-11 text-text-muted leading-list tracking-caption lg:text-12">
+          <p className="flex-1 text-center font-label text-11 text-canvas-text leading-list tracking-caption lg:text-12">
             {dashboardChrome.banner}
           </p>
           <IconButton
@@ -30,7 +30,11 @@ export function DemoBanner() {
             onClick={() => setOpen(false)}
             className="kai-motion-trigger size-8!"
           >
-            <Icon name="close" className="kai-close size-4" />
+            {/* coloured on the icon, since the button's own text colour comes first; dark keeps the plain text colour */}
+            <Icon
+              name="close"
+              className="kai-close size-4 text-canvas-text in-data-[theme=dark]:text-text"
+            />
           </IconButton>
         </div>
       </div>

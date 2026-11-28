@@ -18,9 +18,12 @@ export function SectionHeading({
         <h2 id={id} className="font-heading text-28 leading-display tracking-display md:text-32">
           {title}
         </h2>
-        {lead ? <p className="text-text-muted max-md:hidden">{lead}</p> : null}
+        {lead ? <p className="text-canvas-text max-md:hidden">{lead}</p> : null}
       </div>
-      {link}
+      {/* the link sits on the canvas too: its muted (not ready) colour and its "Soon" note follow the canvas roles */}
+      <div className="contents [--color-text-muted:var(--color-canvas-text)] **:data-soon:text-canvas-note">
+        {link}
+      </div>
     </div>
   );
 }

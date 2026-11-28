@@ -12,8 +12,8 @@ export const siteConfig = {
 export const logoFiles = {
   landing: 'kai-health-logo-blue',
   // the dashboard picks one for its light or dark theme
-  dashboardLight: 'kai-health-logo-darkblue',
-  dashboardDark: 'kai-health-logo-white',
+  dashboardLight: 'kai-health-logo-trial',
+  dashboardDark: 'kai-health-logo-trial-dark',
 } as const;
 
 export const routes = {

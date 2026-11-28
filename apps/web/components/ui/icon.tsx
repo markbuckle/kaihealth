@@ -20,6 +20,9 @@ export const iconNames = [
   'messages',
   'more',
   'moon',
+  'dna',
+  'smile',
+  'microbe',
 ] as const;
 export type IconName = (typeof iconNames)[number];
 
@@ -51,6 +54,27 @@ const paths: Record<IconName, string | { parts: Part[] }> = {
   more: 'M6 12h.01M12 12h.01M18 12h.01',
   // a faceted crescent, straight edges rather than arcs
   moon: 'M13 4.5L9.5 6L6 9L4.5 13L5.5 17L9 19.5L13 20L17 18.5L19.5 15L16 15.5L12.5 14L10.5 11L10.5 7.5Z',
+  dna: {
+    parts: [
+      { d: 'M8 3c0 5 8 5 8 9s-8 4-8 9' },
+      { d: 'M16 3c0 5-8 5-8 9s8 4 8 9' },
+      { d: 'M10 7.5h4M10 16.5h4' },
+    ],
+  },
+  smile: {
+    parts: [
+      { d: 'M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17z' },
+      { d: 'M8.5 14c.9 1.3 2 2 3.5 2s2.6-.7 3.5-2' },
+      { d: 'M9 9.5h.01M15 9.5h.01' },
+    ],
+  },
+  // a rod-shaped bacterium with two spots
+  microbe: {
+    parts: [
+      { d: 'M7.5 16.5a3.5 3.5 0 0 1 0-5l4-4a3.5 3.5 0 0 1 5 5l-4 4a3.5 3.5 0 0 1-5 0z' },
+      { d: 'M10 14h.01M14 10h.01' },
+    ],
+  },
   check: 'M5 12.5l4.5 4.5L19 7.5',
   'arrow-right': 'M5 12h14M13 6l6 6-6 6',
   plus: 'M12 5v14M5 12h14',
