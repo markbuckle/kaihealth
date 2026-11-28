@@ -28,10 +28,10 @@ importers:
         version: 1.2.1(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@splinetool/react-spline':
         specifier: ^4.2.0
-        version: 4.2.0(@splinetool/runtime@2.0.218)(next@16.4.6(@types/node@22.20.5)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
+        version: 4.2.0(@splinetool/runtime@2.0.225)(next@16.4.6(@types/node@22.20.5)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
       '@splinetool/runtime':
-        specifier: ^2.0.218
-        version: 2.0.218
+        specifier: ^2.0.225
+        version: 2.0.225
       next:
         specifier: ^16.4.6
         version: 16.4.6(@types/node@22.20.5)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
@@ -613,8 +613,8 @@ packages:
       next:
         optional: true
 
-  '@splinetool/runtime@2.0.218':
-    resolution: {integrity: sha512-202OpoiFqGFc/5RetPl2e8p6LL3Y/5A5acSnOOLrpKxs5NpybM96BCV9xN8nYpHtT30JWXMTrtxIX1LMx8NSyg==}
+  '@splinetool/runtime@2.0.225':
+    resolution: {integrity: sha512-3nvBHIWnM6VgYUsWCop8ssaMi1Ck+0/qf4kGPPTOfYOVCIXqwHsK7iC/669YaeuKzVPQaRTksjnUc4xV7TZWOg==}
 
   '@swc/helpers@0.5.23':
     resolution: {integrity: sha512-5lSsMOTXURePglDfvuAQUqkGek9Hg2kksOYay2m0+XR++b2NWYL/4sWyuvVBIs8oKnJaxkdi9whaL/sqN13afw==}
@@ -1552,9 +1552,9 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.3.0
 
-  '@splinetool/react-spline@4.2.0(@splinetool/runtime@2.0.218)(next@16.4.6(@types/node@22.20.5)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
+  '@splinetool/react-spline@4.2.0(@splinetool/runtime@2.0.225)(next@16.4.6(@types/node@22.20.5)(react-dom@19.3.1(react@19.3.1))(react@19.3.1))(react-dom@19.3.1(react@19.3.1))(react@19.3.1)':
     dependencies:
-      '@splinetool/runtime': 2.0.218
+      '@splinetool/runtime': 2.0.225
       blurhash: 2.0.5
       lodash.debounce: 4.0.8
       react: 19.3.1
@@ -1564,7 +1564,7 @@ snapshots:
     optionalDependencies:
       next: 16.4.6(@types/node@22.20.5)(react-dom@19.3.1(react@19.3.1))(react@19.3.1)
 
-  '@splinetool/runtime@2.0.218':
+  '@splinetool/runtime@2.0.225':
     dependencies:
       on-change: 4.0.0
       semver-compare: 1.0.0

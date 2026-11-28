@@ -11,11 +11,15 @@ import { Ribbon } from './ui/ribbon';
 // to 2.5rem down into the footer, so the frame is (100% + 9rem) * 15/11 tall.
 // The section above and the footer sit in front of the ribbon (both are z-20), so it seems to
 // slide out from under one and tuck in behind the other.
+// From xl, where the text column sits far enough right, the ribbon is zoomed in 1.35x so more
+// of its detail shows. The canvas itself grows (so it stays sharp) and is shifted back by the
+// translate, which keeps the point 30% across and 10% down the frame fixed: the tip still
+// slides out from under the section above in the same place.
 // On small screens the ribbon fills the space above the text instead and fades out there.
 // The text sits above it all.
-// one-off: the offsets and fade stops were set by eye against the section paddings
+// one-off: the offsets, fade stops and zoom were set by eye against the section paddings
 const ribbonFrame =
-  'absolute left-0 z-10 aspect-[2/3] -top-14 h-[calc(18.5rem*15/11)] lg:-top-26 lg:h-[calc((100%_+_9rem)*15/11)] [mask-image:linear-gradient(to_bottom,black_66.4%,transparent_73.3%)] lg:[mask-image:none]';
+  'absolute left-0 z-10 aspect-[2/3] -top-14 h-[calc(18.5rem*15/11)] lg:-top-26 lg:h-[calc((100%_+_9rem)*15/11)] xl:h-[calc((100%_+_9rem)*15/11*1.35)] xl:-translate-x-[7.8%] xl:-translate-y-[2.6%] [mask-image:linear-gradient(to_bottom,black_66.4%,transparent_73.3%)] lg:[mask-image:none]';
 
 export function FinalCta() {
   return (
