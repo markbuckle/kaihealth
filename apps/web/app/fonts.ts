@@ -1,4 +1,10 @@
-import { Geist, Geist_Mono, Instrument_Serif } from 'next/font/google';
+import {
+  Bricolage_Grotesque,
+  DM_Sans,
+  Geist,
+  Geist_Mono,
+  Instrument_Serif,
+} from 'next/font/google';
 
 // next/font downloads these at build time and serves them from our own origin,
 // so the browser never contacts a font host.
@@ -24,7 +30,23 @@ const instrumentSerif = Instrument_Serif({
   display: 'swap',
 });
 
+// The dashboard's faces: a characterful grotesque for titles and scores, and a plain-zero sans
+// for everything small (no slashed zeros, which read as noise next to lab values).
+const bricolage = Bricolage_Grotesque({
+  subsets: ['latin'],
+  // optical size lets large scores and headings tighten up while small text stays open
+  axes: ['opsz'],
+  variable: '--font-bricolage',
+  display: 'swap',
+});
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  variable: '--font-dm-sans',
+  display: 'swap',
+});
+
 // applied once on <html> so every font token resolves anywhere in the page
-export const fontVariables = [geist, geistMono, instrumentSerif]
+export const fontVariables = [geist, geistMono, instrumentSerif, bricolage, dmSans]
   .map((font) => font.variable)
   .join(' ');

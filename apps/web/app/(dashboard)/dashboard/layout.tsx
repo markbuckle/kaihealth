@@ -30,7 +30,7 @@ export default async function DashboardLayout({ children }: { children: ReactNod
   return (
     <DashboardRoot
       initialTheme={theme}
-      className="flex min-h-dvh flex-col bg-page text-14 text-text leading-body"
+      className="flex min-h-dvh flex-col bg-page font-body text-14 text-text leading-body"
     >
       {theme ? null : <FollowSystemTheme />}
       <DemoBanner />
